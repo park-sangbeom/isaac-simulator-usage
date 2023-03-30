@@ -27,32 +27,6 @@ from typing import Optional
 from model.OmniBase import OmniBase
 import math 
 
-def rotation_to_quaternion(x_rotation, y_rotation, z_rotation):
-    """
-    Converts rotation values in the x,y,z axes to a quaternion.
-    :param x_rotation: rotation in x-axis (in degrees)
-    :param y_rotation: rotation in y-axis (in degrees)
-    :param z_rotation: rotation in z-axis (in degrees)
-    :return: a tuple containing the quaternion (w, x, y, z)
-    """
-    roll = math.radians(x_rotation)
-    pitch = math.radians(y_rotation)
-    yaw = math.radians(z_rotation)
-
-    cy = math.cos(yaw * 0.5)
-    sy = math.sin(yaw * 0.5)
-    cp = math.cos(pitch * 0.5)
-    sp = math.sin(pitch * 0.5)
-    cr = math.cos(roll * 0.5)
-    sr = math.sin(roll * 0.5)
-
-    qw = cr * cp * cy + sr * sp * sy
-    qx = sr * cp * cy - cr * sp * sy
-    qy = cr * sp * cy + sr * cp * sy
-    qz = cr * cp * sy - sr * sp * cy
-
-    return np.array([qw, qx, qy, qz])
-
 class FrankTask(OmniBase):
     def __init__(self, name: str,
         cube_initial_position: Optional[np.ndarray] = None,
@@ -76,7 +50,7 @@ class FrankTask(OmniBase):
         if self._cube_initial_orientation is None:
             self._cube_initial_orientation = np.array([1, 0, 0, 0])
         if self._target_position is None:
-            self._target_position = np.array([-0.3, -0.3, 0]) / get_stage_units()
+            self._target_position = np.array([0.6, 0.4, 0]) / get_stage_units()
             self._target_position[2] = self._cube_size[2] / 2.0
         self._target_position = self._target_position + self._offset
         self.env = World()
@@ -101,16 +75,22 @@ class FrankTask(OmniBase):
                 prim_path="/World/random_cube",
                 name="object",
                 position=np.array([0.5, 0, 0.1]),
-                scale=np.array([0.07, 0.07, 0.14]),
+                scale=self._cube_size,
                 color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
-            )
-        )
+                linear_velocity=np.array([0, 0, 0.01])))
+        self._cube2 = self.env.scene.add(
+            DynamicCuboid(
+                prim_path="/World/random_cube2",
+                name="object2",
+                position=np.array([0.5, 0.2, 0.1]),
+                scale=self._cube_size,
+                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
+                linear_velocity=np.array([0, 0, 0.01])))
+        
         self._robot = self.env.scene.add(
             SingleManipulator(prim_path="/World/Franka", name="{}".format("Franka"), end_effector_prim_name='panda_rightfinger', gripper=gripper)
         )
-        kinematics_config = interface_config_loader.load_supported_lula_kinematics_solver_config("Franka")
-        kinematics = LulaKinematicsSolver(**kinematics_config)
-        self.controller = ArticulationKinematicsSolver(self._robot, kinematics, "panda_hand")
+        self.object_lst = ["object", "object2"]
 
     async def setup_pre_reset(self):
             if self.env.physics_callback_exists("sim_step"):
@@ -133,35 +113,24 @@ class FrankTask(OmniBase):
         my_franka.gripper.set_default_state(my_franka.gripper.joint_opened_positions)
         self._controller = StackingController(
             name="stacking_controller",
-            gripper=my_franka.end_effector,
+            gripper=my_franka.gripper,
             robot_articulation=my_franka,
-            picking_order_cube_names=["object"],
+            picking_order_cube_names=self.object_lst,
             robot_observation_name=my_franka.name,
         )
         self._articulation_controller = my_franka.get_articulation_controller()
-
-    
-    def _on_add_obstacle_event(self):
-        self._controller.add_obstacle(self._cube)
         return
+    
 
     # Information exposed to solve the task is returned from the task through get_observations
     def get_observations(self) -> dict:
-        print( self._robot.get_joints_state())
-        joints_state = self._robot.get_joints_state()
-        cube_position, cube_orientation = self._cube.get_local_pose()
-        end_effector_position, _ = self._robot.end_effector.get_local_pose()
-        return {
-            self._cube.name: {
-                "position": cube_position,
-                "orientation": cube_orientation,
-                "target_position": self._target_position,
-            },
-            self._robot.name: {
-                "joint_positions": joints_state.positions,
-               "end_effector_position": end_effector_position,
-            },
-        }
+        observations = dict()
+        print("self._robot.get_joints_state()", self._robot.get_joints_state())
+        for name in self.object_lst:
+            obj = self.env.scene.get_object(name=name)
+            observations.update({name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1], "target_position":self._target_position}})
+        observations.update({self._robot.name: {"joint_positions":self._robot.get_joints_state().positions,"end_effector_position":self._robot.end_effector.get_local_pose()[0]}})
+        return observations
     
     def get_params(self) -> dict:
         params_representation = dict()
@@ -189,10 +158,10 @@ class FrankTask(OmniBase):
         simulation_context = SimulationContext()
         simulation_context.initialize_physics()
         simulation_context.play()
+        self._on_stacking_physics_step()
         while simulation_app.is_running():
             self.env.step(render=True)
             obs = self.get_observations()
-            print("Observation: {}".format(obs))
             actions = self._controller.forward(observations=obs)
             self._articulation_controller.apply_action(actions)
             if self._controller.is_done():
@@ -201,5 +170,5 @@ class FrankTask(OmniBase):
         simulation_app.close()
 
 if __name__=="__main__":
-    franka = FrankTask(name="Franka")
+    franka = FrankTask(name="Franka", cube_size=np.array([0.0515, 0.0515, 0.0515]))
     franka.main()

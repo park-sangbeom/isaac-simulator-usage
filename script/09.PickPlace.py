@@ -1,5 +1,5 @@
 from omni.isaac.kit import SimulationApp
-simulation_app = SimulationApp({"headless": True})
+simulation_app = SimulationApp({"headless": False})
 from omni.isaac.franka import Franka
 from omni.isaac.core.objects import DynamicCuboid
 from omni.isaac.core import SimulationContext, World
@@ -74,7 +74,7 @@ class FrankTask(OmniBase):
         if self._cube_initial_orientation is None:
             self._cube_initial_orientation = np.array([1, 0, 0, 0])
         if self._target_position is None:
-            self._target_position = np.array([-0.3, -0.3, 0]) / get_stage_units()
+            self._target_position = np.array([-0.3, 0.3, 1]) / get_stage_units()
             self._target_position[2] = self._cube_size[2] / 2.0
         self._target_position = self._target_position + self._offset
         self.env = World()
@@ -99,13 +99,14 @@ class FrankTask(OmniBase):
                 prim_path="/World/random_cube",
                 name="object",
                 position=np.array([0.5, 0, 0.1]),
-                scale=np.array([0.07, 0.07, 0.14]),
+                scale=self._cube_size,
                 color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
             )
         )
         self._robot = self.env.scene.add(
             SingleManipulator(prim_path="/World/Franka", name="{}".format("Franka"), end_effector_prim_name='panda_rightfinger', gripper=gripper)
         )
+        self.object_lst = ["object"]
         kinematics_config = interface_config_loader.load_supported_lula_kinematics_solver_config("Franka")
         kinematics = LulaKinematicsSolver(**kinematics_config)
         self.controller = ArticulationKinematicsSolver(self._robot, kinematics, 'panda_rightfinger')
@@ -132,28 +133,18 @@ class FrankTask(OmniBase):
         self._controller =  PickPlaceController(name="pick_place_controller", gripper=my_franka.gripper, robot_articulation=my_franka)
         self._articulation_controller = my_franka.get_articulation_controller()
 
-    
     def _on_add_obstacle_event(self):
         self._controller.add_obstacle(self._cube)
         return
 
-    # Information exposed to solve the task is returned from the task through get_observations
     def get_observations(self) -> dict:
-        joints_state = self._robot.get_joints_state()
-        cube_position, cube_orientation = self._cube.get_local_pose()
-        end_effector_position, _ = self._robot.end_effector.get_local_pose()
-        return {
-            self._cube.name: {
-                "position": cube_position,
-                "orientation": cube_orientation,
-                "target_position": self._target_position,
-            },
-            self._robot.name: {
-                "joint_positions": joints_state.positions,
-               "end_effector_position": end_effector_position,
-            },
-        }
-    
+        observations = dict()
+        for name in self.object_lst:
+            obj = self.env.scene.get_object(name=name)
+            observations.update({name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1], "target_position":self._target_position}})
+        observations.update({self._robot.name: {"joint_positions":self._robot.get_joints_state().positions,"end_effector_position":self._robot.end_effector.get_local_pose()[0]}})
+        return observations
+
     def get_params(self) -> dict:
         params_representation = dict()
         position, orientation = self._cube.get_local_pose()
@@ -180,19 +171,18 @@ class FrankTask(OmniBase):
         simulation_context = SimulationContext()
         simulation_context.initialize_physics()
         simulation_context.play()
-        target_orientation = rotation_to_quaternion(180,0,0)
         for i in range(10):
             my_franka = self.env.scene.get_object("Franka")
             self._on_placing_physics_step()
             place_position = np.array([np.random.uniform(0.7,0.5), np.random.uniform(-0.3,0.3), 0.1])
             while simulation_app.is_running():
-                self.env.step(render=False)
+                self.env.step(render=True)
                 obs = self.get_observations()
                 actions = self._controller.forward(
                     picking_position=obs["object"]["position"],
                     placing_position=place_position,
                     current_joint_positions=my_franka.get_joint_positions(),
-                    end_effector_offset=np.array([0, 0.005, -0.015]))
+                    end_effector_offset=np.array([0, 0.005, 0.005]))
                 self._articulation_controller.apply_action(actions)
                 if self._controller.is_done():
                     print("Controller is done")
@@ -203,5 +193,5 @@ class FrankTask(OmniBase):
         simulation_app.close()
 
 if __name__=="__main__":
-    franka = FrankTask(name="Franka")
+    franka = FrankTask(name="Franka",cube_size=np.array([0.07, 0.07, 0.14]))
     franka.main()
