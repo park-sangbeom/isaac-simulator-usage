@@ -24,7 +24,9 @@ from omni.isaac.franka.tasks import Stacking
 from omni.isaac.franka.controllers import StackingController
 from omni.isaac.manipulators.grippers import ParallelGripper
 from typing import Optional
-from model.OmniBase import OmniBase
+import sys 
+sys.path.append('..')
+from env.omni_base import OmniBase
 import math 
 
 class FrankTask(OmniBase):
@@ -75,7 +77,7 @@ class FrankTask(OmniBase):
                 prim_path="/World/random_cube",
                 name="object",
                 position=np.array([0.5, 0, 0.1]),
-                scale=self._cube_size,
+                =self._cube_size,
                 color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
                 linear_velocity=np.array([0, 0, 0.01])))
         self._cube2 = self.env.scene.add(

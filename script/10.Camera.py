@@ -52,25 +52,23 @@ camera.add_motion_vectors_to_frame()
 
 while simulation_app.is_running():
     my_world.step(render=True)
-    print(i)
-    # print(camera.get_current_frame())
-    if i == 10:
-        points_2d = camera.get_image_coords_from_world_points(
-            np.array([cube_3.get_world_pose()[0], cube_2.get_world_pose()[0]])
-        )
-        points_3d = camera.get_world_points_from_image_coords(points_2d, np.array([24.94, 24.9]))
-        print(points_2d)
-        print(points_3d)
-        imgplot = plt.imshow(camera.get_rgba()[:, :, :3])
-        plt.show()
-        plt.savefig('test.png')
-        print(camera.get_current_frame()["motion_vectors"])
-        np.save('test.npy', camera.get_rgba()[:, :, :3])
-        break 
-    if my_world.is_playing():
-        if my_world.current_time_step_index == 0:
-            my_world.reset()
-    i += 1
+
+    # points_2d = camera.get_image_coords_from_world_points(
+    #     np.array([cube_3.get_world_pose()[0], cube_2.get_world_pose()[0]])
+    # )
+    # points_3d = camera.get_world_points_from_image_coords(points_2d, np.array([24.94, 24.9]))
+    # print(points_2d)
+    # print(points_3d)
+    print("RGB Shape: {}".format(camera.get_rgba()[:, :, :3]))
+    plt.imshow(camera.get_rgba()[:, :, :3])
+    plt.show()
+    plt.savefig('test.png')
+    np.save('test.npy', camera.get_rgba()[:, :, :3])
+    # break 
+    # if my_world.is_playing():
+    #     if my_world.current_time_step_index == 0:
+    #         my_world.reset()
+    # i += 1
 
 
 simulation_app.close()

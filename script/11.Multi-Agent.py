@@ -12,7 +12,9 @@ from omni.isaac.motion_generation import interface_config_loader
 from omni.isaac.manipulators import SingleManipulator 
 from omni.isaac.manipulators.grippers import ParallelGripper
 from omni.isaac.franka.controllers.pick_place_controller import PickPlaceController
-from model.OmniBase import OmniBase
+import sys 
+sys.path.append('..')
+from env.omni_base import OmniBase
 import math 
 import numpy as np
 from typing import Optional

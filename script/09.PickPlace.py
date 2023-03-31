@@ -22,8 +22,10 @@ from omni.isaac.franka.tasks import Stacking
 from omni.isaac.franka.controllers.pick_place_controller import PickPlaceController
 from omni.isaac.manipulators.grippers import ParallelGripper
 from typing import Optional
-from model.OmniBase import OmniBase
-import math 
+import sys 
+sys.path.append('..')
+from env.omni_base import OmniBase
+import math  
 
 def rotation_to_quaternion(x_rotation, y_rotation, z_rotation):
     """

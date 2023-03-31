@@ -1,0 +1,23 @@
+seed: 42 
+agent_num: 1
+map_name: "grid_default"
+
+
+robot_info: 
+  robot_path: "/Isaac/Robots/Franka/franka_alt_fingers.usd"
+  name: "Franka"
+  prim_path: "/World/Franka"
+  end_effector_prim_path: "/World/Franka/panda_rightfinger" 
+  joint_prim_names: 
+    - "panda_finger_joint1"
+    - "panda_finger_joint2"
+  end_effector_prim_name: "panda_rightfinger"
+
+object_num: 1
+object_info:
+  type: "dynamic cuboid"
+  name: "object"
+  prim_path: "/World/cube"
+  
+camera_info: 
+  prim_path: "/World/Camera"

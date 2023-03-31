@@ -9,7 +9,6 @@
 from omni.isaac.core import World
 from omni.isaac.core.scenes.scene import Scene
 from omni.isaac.core.utils.stage import create_new_stage_async, update_stage_async
-from omni.isaac.core.scenes.scene import Scene
 from omni.isaac.core.simulation_context import SimulationContext
 import gc
 from typing import Optional
