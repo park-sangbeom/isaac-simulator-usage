@@ -32,7 +32,7 @@ class OmniverseEnvironment:
         asset_path=""
         if self.map_name=="grid_default":
             asset_path = get_assets_root_path()+"/Isaac/Environments/Grid/default_environment.usd"
-            add_reference_to_stage(usd_path=asset_path, prim_path="/World")
+            add_reference_to_stage(usd_path=asset_path, prim_path="/World/Franka")
 
         elif self.map_name=="simple_room":
             asset_path = get_assets_root_path()+"/Isaac/Environments/Simple_Room/simple_room.usd"
@@ -116,15 +116,15 @@ class OmniverseEnvironment:
             orientation=rot_utils.euler_angles_to_quats(rotation, degrees=True))
         self.camera_lst.append(self.camera)
 
-    def get_observations(self) -> dict:
-        observations = dict()
+    def _get_observations(self) -> dict:
+        self.observations = dict()
         for obj_name in self.object_lst:
             obj = self.world.scene.get_object(name=obj_name)
-            observations.update({obj_name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1]}})
+            self.observations.update({obj_name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1]}})
         for robot_name in self.robot_lst:
             robo = self.world.scene.get_object(name=robot_name)
-            observations.update({robot_name: {"joint_positions":robo.get_joints_state().positions,"end_effector_position":robo.end_effector.get_local_pose()[0]}})
-        return observations
+            self.observations.update({robot_name: {"joint_positions":robo.get_joints_state().positions,"end_effector_position":robo.end_effector.get_local_pose()[0]}})
+        return self.observations
 
     def remove_object(self, object_name):
         pass 

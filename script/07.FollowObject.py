@@ -22,7 +22,7 @@ from omni.isaac.core.utils.nucleus import get_assets_root_path
 from omni.isaac.manipulators import SingleManipulator 
 from omni.isaac.franka.controllers import RMPFlowController
 from typing import Optional
-from model.OmniBase import OmniBase
+from omniverse_usage.script.model.omni_base import OmniBase
 import math 
 
 def rotation_to_quaternion(x_rotation, y_rotation, z_rotation):

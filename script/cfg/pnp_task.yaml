@@ -1,7 +1,8 @@
 seed: 42 
-agent_num: 1
+agent_num: 10
 map_name: "grid_default"
 
+place_offset: 2.0
 
 robot_info: 
   robot_path: "/Isaac/Robots/Franka/franka_alt_fingers.usd"

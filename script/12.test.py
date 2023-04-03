@@ -22,27 +22,99 @@ from omni.isaac.manipulators import SingleManipulator
 from omni.isaac.franka.tasks import Stacking
 from omni.isaac.franka.controllers.pick_place_controller import PickPlaceController
 from omni.isaac.manipulators.grippers import ParallelGripper
-from omni.isaac.core.objects import DynamicCuboid
+from omni.isaac.core.objects import cuboid, sphere, capsule, cylinder, cone, ground_plane
+
+from omni.isaac.core import World
+import carb 
 
 class FrankaWorld(OmniBase):
     def __init__(self, name="Franka World", map_name='grid_default'):
-        self.env = OmniverseEnvironment(map_name=map_name)
+        self.env = World()
+        self.map_name = map_name
+        self.object_lst       = []
+        self.robot_lst        = []
+        self.controller_lst   = []
+        self.articulation_lst = []
+        # self.set_up_scene()
 
-    def set_env(self):
-        self.env.add_env()
+    def add_plane(self):
+        asset_path=""
+        if self.map_name=="grid_default":
+            asset_path = get_assets_root_path()+"/Isaac/Environments/Grid/default_environment.usd"
+            add_reference_to_stage(usd_path=asset_path, prim_path="/World")
 
-    def set_object(self,object_info):    
-        self.env.add_object(object_info=object_info)
+        elif self.map_name=="simple_room":
+            asset_path = get_assets_root_path()+"/Isaac/Environments/Simple_Room/simple_room.usd"
+            add_reference_to_stage(usd_path=asset_path, prim_path="/World")
+
+        elif self.map_name=="office":
+            asset_path = get_assets_root_path()+"/Isaac/Environments/Office/office.usd"
+            add_reference_to_stage(usd_path=asset_path, prim_path="/World")
+        
+        else: 
+            carb.log_error("Could not find the '{}' environment".format(self.map_name))
+
+    def add_robot(self, robot_info=None):
+        robot_path = robot_info["robot_path"]
+        asset_path = get_assets_root_path() + robot_path
+        add_reference_to_stage(usd_path=asset_path, prim_path=robot_info["prim_path"])
+        gripper=ParallelGripper(
+            end_effector_prim_path=robot_info["end_effector_prim_path"],
+            joint_prim_names=robot_info["joint_prim_names"],
+            joint_opened_positions=np.array([0.05, 0.05]),
+            joint_closed_positions=np.array([0.0, 0.0]),
+            action_deltas=np.array([0.05, 0.05]))
+        # Robot 
+        robot=self.env.scene.add((
+            SingleManipulator(
+            prim_path=robot_info["prim_path"], 
+            name=robot_info["name"], 
+            end_effector_prim_name=robot_info["end_effector_prim_name"],
+            gripper=gripper,
+            position=robot_info["translation_offset"])))
+        robot.gripper.set_default_state(robot.gripper.joint_opened_positions)
+        self.robot_lst.append(robot_info["name"])
+        # Controller
+        self.controller =  PickPlaceController(name="pick_place_controller", gripper=robot.gripper, robot_articulation=robot)
+        self.controller_lst.append(self.controller)
+        # Articulation controller
+        self.articulation_controller = robot.get_articulation_controller()
+        self.articulation_lst.append(self.articulation_controller)
+
     
-    def set_robot(self,robot_info):
-        self.env.add_robot(robot_info=robot_info)
-        # self.env.add_controller(robot_name=robot_info["name"])
+    def add_object(self, object_info=None):
+        if object_info["type"] == "fixed cuboid":
+            self.env.scene.add(cuboid.FixedCuboid( 
+                                name=object_info["name"],
+                                prim_path=object_info["prim_path"],
+                                position=object_info["position"],
+                                scale=object_info["scale"],
+                                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)])
+                                ))
+        
+        elif object_info["type"]=="dynamic cuboid":
+            self.env.scene.add(cuboid.DynamicCuboid(
+                                name=object_info["name"],
+                                prim_path=object_info["prim_path"],
+                                position=object_info["position"],
+                                scale=object_info["scale"],
+                                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
+                                ))
+        elif object_info["type"]=="visual cuboid": 
+            self.env.scene.add(cuboid.VisualCuboid(
+                                name=object_info["name"],
+                                prim_path=object_info["prim_path"],
+                                position=object_info["position"],
+                                scale=object_info["scale"],
+                                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
+                                ))
+        self.object_lst.append(object_info["name"])
 
-    def set_camera(self, camera_info):
-        self.env.add_camera(prim_path=camera_info["prim_path"],
-                            position=camera_info["position"],
-                            rotation=camera_info["rotation"],
-                            resolution=camera_info["resolution"])
+    # def set_camera(self, camera_info):
+    #     self.env.add_camera(prim_path=camera_info["prim_path"],
+    #                         position=camera_info["position"],
+    #                         rotation=camera_info["rotation"],
+    #                         resolution=camera_info["resolution"])
 
     def get_rgb(self, rel_dir="omniverse_usage/script/data/npy/", image_name="test.npy"):
         for camera_idx, camera in enumerate(self.env.camera_lst):
@@ -51,6 +123,48 @@ class FrankaWorld(OmniBase):
             np.save(path, rgb)
         return rgb 
     
+    def get_observations(self):
+        self.observations = dict()
+        # Object observation
+        for obj_name in self.object_lst:
+            obj = self.env.scene.get_object(name=obj_name)
+            self.observations.update({obj_name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1]}})
+        # Robot observation
+        for robot_name in self.robot_lst:
+            robo = self.env.scene.get_object(name=robot_name)
+            self.observations.update({robot_name: {"joint_positions":robo.get_joints_state().positions,"end_effector_position":robo.end_effector.get_local_pose()[0]}})
+        return self.observations
+    
+    def main(self): 
+        # Set place position
+        place_position_lst = []
+        for _agent_idx in range(len(self.robot_lst)): 
+            place_position_lst.append(np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+_agent_idx*2.0, 0.1]))
+        # Init 
+        simulation_context = SimulationContext()
+        simulation_context.initialize_physics()
+        simulation_context.play()
+        while simulation_app.is_running():
+            self.env.step(render=True)
+            obs = self.get_observations()
+
+            for agent_idx, (robot_name, controller, articulation_controller, place_position) in enumerate(zip(self.robot_lst, self.controller_lst, self.articulation_lst, place_position_lst)):
+                target_object = "object_{}_1".format(format(agent_idx+1))
+                my_franka = self.env.scene.get_object(robot_name)
+                actions = controller.forward(
+                        picking_position=obs[target_object]["position"],
+                        placing_position=place_position,
+                        current_joint_positions=my_franka.get_joint_positions(),
+                        end_effector_offset=np.array([0, 0.005, 0.005]))
+                articulation_controller.apply_action(actions)
+                # if self._controller.is_done():
+                #     print("Controller is done")
+                #     self.env.pause()
+                #     self.env.reset()
+                #     self.world_cleanup()
+                #     break 
+        simulation_app.close()
+
 if __name__=="__main__": 
     # World 
     task = FrankaWorld(map_name='grid_default')
@@ -59,7 +173,7 @@ if __name__=="__main__":
     with open(task_info_dir, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     # Set Plane
-    task.set_env()
+    task.add_plane()
     # Robot, Object, Camera Setup
     for agent_idx in range(config["agent_num"]):
         # Robot
@@ -68,89 +182,21 @@ if __name__=="__main__":
                     "end_effector_prim_path": "/World/Franka{}/panda_rightfinger".format(agent_idx+1),
                     "joint_prim_names": config["robot_info"]["joint_prim_names"],
                     "robot_path": config["robot_info"]["robot_path"],
-                    "translation_offset": np.array([0,0+agent_idx*5,0]),
+                    "translation_offset": np.array([0,0+agent_idx*2,0]),
                     "end_effector_prim_name": config["robot_info"]["end_effector_prim_name"]}
-        task.set_robot(robot_info=robot_info)
+        task.add_robot(robot_info=robot_info)
         # Camera 
         camera_info = {"prim_path": config["camera_info"]["prim_path"]+"{}".format(agent_idx+1),
-                    "position": np.array([1.5,0+agent_idx*5,1.3]),
+                    "position": np.array([1.5,0+agent_idx*config["place_offset"],1.3]),
                     "rotation": np.array([180,135,0]),
                     "resolution": (256, 256)}
-        task.set_camera(camera_info=camera_info)
         # Object 
         for object_idx in range(config["object_num"]):
             object_info = {"name": config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1), 
                         "prim_path": config["object_info"]["prim_path"]+"_{}_{}".format(agent_idx+1, object_idx+1),
-                        "position": np.array([0.5+object_idx*0.1,0+agent_idx*5,0.3]),
+                        "position": np.array([0.5+object_idx*0.1,0+agent_idx*config["place_offset"],0.3]),
                         "scale": np.array([0.07, 0.07, 0.14]),
                         "type": config["object_info"]["type"]}
-            task.set_object(object_info=object_info)
-
-    task.env.world.reset()
-    # task.env.camera.initialize()
-    # task.env.camera.add_motion_vectors_to_frame()
-
-    # Simulation Init 
-    simulation_context = SimulationContext()
-    simulation_context.initialize_physics()
-    simulation_context.play()
-
-    while simulation_app.is_running():
-        task.env.world.step(render=True) 
-        rgb = task.get_rgb()
-        obs = task.env.get_observations()
-        # for control_idx, (controller,articulation) in enumerate(zip(task.env.controller_lst, task.env.articulation_lst)): 
-        #     franka = task.env.world.scene.get_object("Franka{}".format(control_idx+1))
-        #     print("Franka{}".format(control_idx+1))
-        #     for obj_idx in range(config["object_num"]):
-        #         print(obs["object"+"_{}_{}".format(control_idx+1, obj_idx+1)]["position"]+np.array([0,0.2,0]))
-        #         actions = controller.forward(
-        #             picking_position=obs["object"+"_{}_{}".format(control_idx+1, obj_idx+1)]["position"]-np.array([obj_idx*0.1, agent_idx*5, 0]),
-        #             placing_position=obs["object"+"_{}_{}".format(control_idx+1, obj_idx+1)]["position"]-np.array([obj_idx*0.1, agent_idx*5, 0])+np.array([0,0.2,0]),
-        #             current_joint_positions=franka.get_joint_positions(),
-        #             end_effector_offset=np.array([0, 0.005, 0.005]))
-        #         print(actions)
-        #         articulation.apply_action(actions)
-    simulation_app.close()
-
-
-    # robot_path = "/Isaac/Robots/Franka/franka_alt_fingers.usd"
-    # asset_path = get_assets_root_path() + robot_path
-    # add_reference_to_stage(usd_path=asset_path, prim_path="/World/Franka")
-    # gripper = ParallelGripper(
-    #     end_effector_prim_path="/World/Franka/panda_rightfinger",
-    #     joint_prim_names=["panda_finger_joint1", "panda_finger_joint2"],
-    #     joint_opened_positions=np.array([0.05, 0.05]),
-    #     joint_closed_positions=np.array([0.0, 0.0]),
-    #     action_deltas=np.array([0.05, 0.05]),
-    # )
-    # cube = task.env.world.scene.add(
-    #     DynamicCuboid(
-    #         prim_path="/World/random_cube",
-    #         name="object",
-    #         position=np.array([0.5, 0, 0.1]),
-    #         scale=np.array([0.07, 0.07, 0.14]),
-    #         color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
-    #     )
-    # )
-    # robot = task.env.world.scene.add(
-    #     SingleManipulator(prim_path="/World/Franka", name="{}".format("Franka"), end_effector_prim_name='panda_rightfinger', gripper=gripper)
-    # )
-    # robot = task.env.world.scene.get_object("Franka")
-    # robot.gripper.set_default_state(robot.gripper.joint_opened_positions)
-    # controller =  PickPlaceController(name="pick_place_controller", gripper=robot.gripper, robot_articulation=robot)
-    # articulation_controller = robot.get_articulation_controller()
-
-    # while simulation_app.is_running():
-    #     task.env.world.step(render=True) 
-    #     # rgb = task.get_rgb()
-    #     # obs = task.env.get_observations()
-    #     actions = controller.forward(
-    #         picking_position=task.env.world.scene.get_object(name='object').get_local_pose()[0],
-    #         placing_position=np.array([0.5,0.3,0.07]),
-    #         current_joint_positions=robot.get_joint_positions(),
-    #         end_effector_offset=np.array([0, 0.005, 0.005]))
-    #     articulation_controller.apply_action(actions)
-    #     if controller.is_done():
-    #         print("Controller is done")
-    # simulation_app.close()
+            task.add_object(object_info=object_info)
+    task.main()
+ 

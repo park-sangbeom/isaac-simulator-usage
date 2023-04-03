@@ -26,6 +26,7 @@ import sys
 sys.path.append('..')
 from env.omni_base import OmniBase
 import math  
+import time 
 
 def rotation_to_quaternion(x_rotation, y_rotation, z_rotation):
     """
@@ -113,21 +114,21 @@ class FrankTask(OmniBase):
         kinematics = LulaKinematicsSolver(**kinematics_config)
         self.controller = ArticulationKinematicsSolver(self._robot, kinematics, 'panda_rightfinger')
 
-    async def setup_pre_reset(self):
-            if self.env.physics_callback_exists("sim_step"):
-                self.env.remove_physics_callback("sim_step")
-            self._controller.reset()
-            return
+    # async def setup_pre_reset(self):
+    #         if self.env.physics_callback_exists("sim_step"):
+    #             self.env.remove_physics_callback("sim_step")
+    #         self._controller.reset()
+    #         return
     
     def world_cleanup(self):
         self._controller = None
         return
     
-    async def _on_stacking_event_async(self):
-        world = self.get_world()
-        world.add_physics_callback("sim_step", self._on_placing_physics_step)
-        await world.play_async()
-        return
+    # async def _on_stacking_event_async(self):
+    #     world = self.get_world()
+    #     world.add_physics_callback("sim_step", self._on_placing_physics_step)
+    #     await world.play_async()
+    #     return
 
     def _on_placing_physics_step(self):
         my_franka = self.env.scene.get_object("Franka")
@@ -147,32 +148,33 @@ class FrankTask(OmniBase):
         observations.update({self._robot.name: {"joint_positions":self._robot.get_joints_state().positions,"end_effector_position":self._robot.end_effector.get_local_pose()[0]}})
         return observations
 
-    def get_params(self) -> dict:
-        params_representation = dict()
-        position, orientation = self._cube.get_local_pose()
-        params_representation["cube_position"] = {"value": position, "modifiable": True}
-        params_representation["cube_orientation"] = {"value": orientation, "modifiable": True}
-        params_representation["target_position"] = {"value": self._target_position, "modifiable": True}
-        params_representation["cube_name"] = {"value": self._cube.name, "modifiable": False}
-        params_representation["robot_name"] = {"value": self._robot.name, "modifiable": False}
-        return params_representation
+    # def get_params(self) -> dict:
+    #     params_representation = dict()
+    #     position, orientation = self._cube.get_local_pose()
+    #     params_representation["cube_position"] = {"value": position, "modifiable": True}
+    #     params_representation["cube_orientation"] = {"value": orientation, "modifiable": True}
+    #     params_representation["target_position"] = {"value": self._target_position, "modifiable": True}
+    #     params_representation["cube_name"] = {"value": self._cube.name, "modifiable": False}
+    #     params_representation["robot_name"] = {"value": self._robot.name, "modifiable": False}
+    #     return params_representation
     
-    async def setup_pre_reset(self):
-        world = self.get_world()
-        if world.physics_callback_exists("sim_step"):
-            world.remove_physics_callback("sim_step")
-        self._controller.reset()
-        return
+    # async def setup_pre_reset(self):
+    #     world = self.get_world()
+    #     if world.physics_callback_exists("sim_step"):
+    #         world.remove_physics_callback("sim_step")
+    #     self._controller.reset()
+    #     return
     
     def world_cleanup(self):
         self._controller = None
         return
     
     def main(self):
-        # Simulation Init 
+        # Simulation Init, It is necessary to work it
         simulation_context = SimulationContext()
         simulation_context.initialize_physics()
         simulation_context.play()
+        old_t = time.time()
         for i in range(10):
             my_franka = self.env.scene.get_object("Franka")
             self._on_placing_physics_step()
@@ -192,6 +194,8 @@ class FrankTask(OmniBase):
                     self.env.reset()
                     self.world_cleanup()
                     break 
+        curr_t = time.time()
+        print("Total Time: {}".format(curr_t-old_t))
         simulation_app.close()
 
 if __name__=="__main__":
