@@ -1,5 +1,5 @@
 seed: 42 
-agent_num: 10
+agent_num: 1
 map_name: "grid_default"
 
 place_offset: 2.0
@@ -19,6 +19,9 @@ object_info:
   type: "dynamic cuboid"
   name: "object"
   prim_path: "/World/cube"
-  
+  scale: [0.07, 0.07, 0.14]
+
 camera_info: 
   prim_path: "/World/Camera"
+  rotation: [180,135,0]
+  resolution: [256, 256]

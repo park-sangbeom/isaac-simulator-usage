@@ -1,6 +1,7 @@
 *.pdf 
 *.png 
 *.pyc
+*.npy
 # Custom
 .vscode/
 log/
