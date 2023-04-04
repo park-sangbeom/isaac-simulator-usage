@@ -1,6 +1,6 @@
-epochs: 2
+epochs: 1
 seed: 42 
-agent_num: 1
+agent_num: 2
 plane_name: "grid_default"
 
 place_offset: 2.0
@@ -15,7 +15,7 @@ robot_info:
     - "panda_finger_joint2"
   end_effector_prim_name: "panda_rightfinger"
 
-object_num: 1
+object_num: 2
 object_info:
   type: "dynamic cuboid"
   name: "object"

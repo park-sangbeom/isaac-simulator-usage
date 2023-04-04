@@ -1,4 +1,4 @@
-epochs: 2
+epochs: 10
 seed: 42 
 agent_num: 1
 plane_name: "grid_default"
