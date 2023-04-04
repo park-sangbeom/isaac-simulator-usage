@@ -17,10 +17,10 @@ robot_info:
 
 object_num: 1
 object_info:
-  type: "dynamic cuboid"
+  type: "visual cuboid"
   name: "object"
   prim_path: "/World/cube"
-  scale: [0.07, 0.07, 0.14]
+  scale: [0.05, 0.05, 0.05]
 
 camera_info: 
   prim_path: "/World/Camera"

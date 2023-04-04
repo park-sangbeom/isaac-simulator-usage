@@ -20,7 +20,6 @@ def main(args):
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Argparse Tutorial')
-
-    parser.add_argument('--task_name', type=str, default='pick-and-place', help="pick-and-place or following or stacking")
+    parser.add_argument('--task_name', type=str, default='stacking', help="pick-and-place, following, stacking")
     args    = parser.parse_args()
     main(args)

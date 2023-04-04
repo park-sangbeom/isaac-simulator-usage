@@ -10,6 +10,9 @@ from omni.isaac.manipulators.grippers import ParallelGripper
 from omni.isaac.franka.controllers import StackingController
 from omni.isaac.franka.controllers import RMPFlowController
 from omni.isaac.franka.controllers.pick_place_controller import PickPlaceController
+from omni.isaac.core.materials import PhysicsMaterial
+from omni.isaac.core.utils.string import find_unique_string_name
+from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
 from omni.isaac.sensor import Camera
 from env.omni_base import OmniBase
 from typing import Optional, Union, Dict, List
@@ -22,17 +25,18 @@ import carb
 
 class FrankaSim(OmniBase):
     def __init__(self, task_name: str = "pick-and-place", 
-                       config: Optional = None):
-        self.object_lst         = []
+                       config: Optional[dict] = None):
         self.robot_lst          = []
         self.controller_lst     = []
         self.articulation_lst   = []
+        self.object_lst         = []
         self.camera_lst         = []
         self.env                = World()
         self.simulation_context = SimulationContext()
         self.config             = config 
         self.task_name          = task_name 
         self.plane_name         = self.config["plane_name"]
+        self.max_count          = self.config["agent_num"]
         np.random.seed(self.config["seed"])
         self.set_up_scene()
 
@@ -41,6 +45,7 @@ class FrankaSim(OmniBase):
         self.simulation_context.play()
 
     def init_world(self): 
+        self.env.pause()
         self.env.reset()
         self.reset_object()
         self.reset_controller()
@@ -70,20 +75,11 @@ class FrankaSim(OmniBase):
                         "robot_path": self.config["robot_info"]["robot_path"],
                         "translation_offset": np.array([0,0+agent_idx*2,0]),
                         "end_effector_prim_name": self.config["robot_info"]["end_effector_prim_name"]}
-            if self.task_name == "stacking":
-                # TODO: Object order length -> Should be at least two objects to show stacking 
-                self.add_robot(robot_info=robot_info)
-            else: self.add_robot(robot_info=robot_info)
-            # Object 
-            object_order_lst = []
-            # for object_idx in range(config["object_num"]):
-            #     object_info = {"name": config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1), 
-            #                    "prim_path": config["object_info"]["prim_path"]+"_{}_{}".format(agent_idx+1, object_idx+1),
-            #                    "position": np.array([0.5+object_idx*0.1,0+agent_idx*config["place_offset"],0.3]),
-            #                    "scale": np.array(config["object_info"]["scale"]),
-            #                    "type": config["object_info"]["type"]}
-            #     object_order_lst.append(config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1))
-            #     task.add_object(object_info=object_info)
+            self.add_robot(robot_info=robot_info)
+
+    # TODO: Get parameters from envrionment
+    def get_params(self):
+        pass 
 
     def add_plane(self):
         asset_path=""
@@ -109,9 +105,9 @@ class FrankaSim(OmniBase):
         gripper=ParallelGripper(
             end_effector_prim_path=robot_info["end_effector_prim_path"],
             joint_prim_names=robot_info["joint_prim_names"],
-            joint_opened_positions=np.array([0.05, 0.05]),
-            joint_closed_positions=np.array([0.0, 0.0]),
-            action_deltas=np.array([0.05, 0.05]))
+            joint_opened_positions=np.array([0.05, 0.05])/ get_stage_units(),
+            joint_closed_positions=np.array([0, 0]), # np.array([0.0, 0.0])
+            action_deltas=np.array([0.05, 0.05])/ get_stage_units())
         # Robot 
         robot=self.env.scene.add((
             SingleManipulator(
@@ -131,18 +127,24 @@ class FrankaSim(OmniBase):
                 self.controller =  PickPlaceController(name="pick_place_controller", gripper=robot.gripper, robot_articulation=robot)
             elif self.task_name=="following":
                 self.controller =  RMPFlowController(name="target_follower_controller", robot_articulation=robot)
-            elif self.task_name=="stacking": 
-                self.controller = StackingController(
-                    name="stacking_controller",
-                    gripper=robot.gripper,
-                    robot_articulation=robot,
-                    picking_order_cube_names=object_order_lst,
-                    robot_observation_name=robot.name)
             self.controller_lst.append(self.controller)
             # Articulation controller
             self.articulation_controller = robot.get_articulation_controller()
             self.articulation_lst.append(self.articulation_controller)
-        self.max_count = len(self.controller_lst)
+
+    def add_stacking_controller(self, robot_name: str, object_order_lst: List): 
+        robot = self.env.scene.get_object(robot_name)
+        # Controller Setup
+        self.controller = StackingController(
+            name="stacking_controller",
+            gripper=robot.gripper,
+            robot_articulation=robot,
+            picking_order_cube_names=object_order_lst,
+            robot_observation_name=robot.name)
+        self.controller_lst.append(self.controller)
+        # Articulation controller
+        self.articulation_controller = robot.get_articulation_controller()
+        self.articulation_lst.append(self.articulation_controller)
 
     def add_object(self, object_info: Dict[str,str]):
         if object_info["type"] == "fixed cuboid":
@@ -151,16 +153,34 @@ class FrankaSim(OmniBase):
                                 prim_path=object_info["prim_path"],
                                 position=object_info["position"],
                                 scale=object_info["scale"],
-                                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)])
+                                color=np.random.uniform(size=(3,))
                                 ))
         
         elif object_info["type"]=="dynamic cuboid":
+            # TODO: Figure out which parameters are fit for manipulations 
+            static_friction = 0.2
+            dynamic_friction = 0.1
+            restitution = 0.1
+            physics_material_path = find_unique_string_name(
+                initial_name="/World/Physics_Materials/physics_material",
+                is_unique_fn=lambda x: not is_prim_path_valid(x),
+            )
+            physics_material = PhysicsMaterial(
+                prim_path=physics_material_path,
+                dynamic_friction=dynamic_friction,
+                static_friction=static_friction,
+                restitution=restitution,
+            )
             self.env.scene.add(cuboid.DynamicCuboid(
                                 name=object_info["name"],
                                 prim_path=object_info["prim_path"],
                                 position=object_info["position"],
                                 scale=object_info["scale"],
-                                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
+                                color=np.random.uniform(size=(3,)),
+                                mass= 0.001,
+                                linear_velocity=np.array([0,0,0]),
+                                angular_velocity=np.array([0,0,0]), 
+                                physics_material=physics_material
                                 ))
         elif object_info["type"]=="visual cuboid": 
             self.env.scene.add(cuboid.VisualCuboid(
@@ -168,7 +188,7 @@ class FrankaSim(OmniBase):
                                 prim_path=object_info["prim_path"],
                                 position=object_info["position"],
                                 scale=object_info["scale"],
-                                color=np.array([np.random.uniform(0,1), np.random.uniform(0,1), np.random.uniform(0,1)]),
+                                color=np.random.uniform(size=(3,))
                                 ))
         self.object_lst.append(object_info["name"])
 
@@ -193,19 +213,24 @@ class FrankaSim(OmniBase):
                 np.save(path, rgb)
         return rgb_lst 
     
-    # def get_depth(self, rel_dir: str = "omniverse_usage/script/data/npy/",
-    #               image_name: str = "test.npy",
-    #               SAVE: bool = False)
-    #     depth_lst = []
-    #     for camera_idx, camera in enumerate(self.camera_lst):
-    #         depth = camera.get_world
-
     def get_proprioception(self) -> dict:
         self.proprioception = dict()
         # Object observation
-        for obj_name in self.object_lst:
-            obj = self.env.scene.get_object(name=obj_name)
-            self.proprioception.update({obj_name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1], "target_position":np.array([0.8, 0.2, 0.07])}})
+        if self.task_name=="stacking":
+            for obj_idx, (obj_name, target_position) in enumerate(zip(self.object_lst, self.target_position_lst)):
+                i = obj_idx%self.config["object_num"]
+                obj = self.env.scene.get_object(name=obj_name)
+                self.proprioception.update({obj_name: {"position":obj.get_local_pose()[0], 
+                                                       "orientation":obj.get_local_pose()[1], 
+                                                       "target_position":np.array(
+                                                        [target_position[0],
+                                                         target_position[1],
+                                                        (self.config["object_info"]["scale"][2] * i) + self.config["object_info"]["scale"][2]/ 2.0])
+                                                        }})                                  
+        else:
+            for obj_name in self.object_lst:
+                obj = self.env.scene.get_object(name=obj_name)
+                self.proprioception.update({obj_name: {"position":obj.get_local_pose()[0], "orientation":obj.get_local_pose()[1]}})
         # Robot observation
         for robot_name in self.robot_lst:
             robo = self.env.scene.get_object(name=robot_name)
@@ -213,28 +238,47 @@ class FrankaSim(OmniBase):
         return self.proprioception
  
 
-    def stack(self, total_object_lst=None): 
+    def stack(self, epochs: int=1): 
         """
         Stakcing objects Task
         """
         self.init_simulation()
 
-        # Set target position 
-        place_position_lst = []
-        for _agent_idx in range(len(self.robot_lst)): 
-            place_position_lst.append(np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+_agent_idx*2.0, 0.1]))
-        while simulation_app.is_running():
-            self.env.step(render=True)
-            obs = self.get_proprioception()
-            for agent_idx, (controller, articulation_controller) in enumerate(zip(self.controller_lst, self.articulation_lst)):
-                actions = controller.forward(obs)
-                articulation_controller.apply_action(actions)
-                # if self._controller.is_done():
-                #     print("Controller is done")
-                #     self.env.pause()
-                #     self.env.reset()
-                #     self.world_cleanup()
-                #     break 
+        for _ in range(epochs):
+            self.target_position_lst=[]
+            reset_count=0 
+            # Random Initialization
+            for agent_idx in range(self.config["agent_num"]):
+                robot_name = "Franka{}".format(agent_idx+1)
+                object_order_lst=[];
+                # Set target position 
+                target_position = np.array([np.random.uniform(0.5,0.7), 0.2+agent_idx*2.0, 0.0515])
+                for object_idx in range(self.config["object_num"]):
+                    init_position = (np.array([np.random.uniform(0.5,0.7), -0.2+agent_idx*self.config["place_offset"], 0.06]))
+                    object_info = {"name": self.config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1), 
+                                "prim_path": self.config["object_info"]["prim_path"]+"_{}_{}".format(agent_idx+1, object_idx+1),
+                                "position": init_position,
+                                "scale": np.array(self.config["object_info"]["scale"]),
+                                "type": self.config["object_info"]["type"],
+                                "target_position": target_position}
+                    self.target_position_lst.append(target_position)
+                    self.add_object(object_info=object_info)
+                    object_order_lst.append(self.config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1))
+                self.add_stacking_controller(robot_name=robot_name, object_order_lst=object_order_lst)
+
+            while simulation_app.is_running():
+                self.env.step(render=True)
+                obs = self.get_proprioception()
+                for controller, articulation_controller in zip(self.controller_lst, self.articulation_lst):
+                    actions = controller.forward(obs)
+                    articulation_controller.apply_action(actions)
+                    if controller.is_done():
+                        print("Controller is done")
+                        reset_count+=1 
+                if reset_count == self.max_count:
+                    self.init_world()
+                    reset_count=0
+                    break 
         simulation_app.close()
    
     def follow_target(self, epochs: int=1):
@@ -244,24 +288,19 @@ class FrankaSim(OmniBase):
         self.init_simulation()
 
         for _ in range(epochs):
-            print(epochs)
             reset_count=0 
-            # Set target position 
-            target_position_lst = []
-            for _agent_idx in range(len(self.robot_lst)): 
-                target_position_lst.append(np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+_agent_idx*2.0, 0.1]))
             self.add_controller()
             # Random Initialization
-            for agent_idx in range(config["agent_num"]):
+            for agent_idx in range(self.config["agent_num"]):
                 for object_idx in range(self.config["object_num"]):
-                    random_position = (np.array([np.random.uniform(0.65,0.85), np.random.uniform(-0.3,0.3)+_agent_idx*self.config["place_offset"], 0.3]))
-                    object_info = {"name": config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1), 
-                                "prim_path": config["object_info"]["prim_path"]+"_{}_{}".format(agent_idx+1, object_idx+1),
+                    random_position = (np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+agent_idx*self.config["place_offset"], np.random.uniform(0.2,0.6)]))
+                    object_info = {"name": self.config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1), 
+                                "prim_path": self.config["object_info"]["prim_path"]+"_{}_{}".format(agent_idx+1, object_idx+1),
                                 "position": random_position,
-                                "scale": np.array(config["object_info"]["scale"]),
-                                "type": config["object_info"]["type"]}
+                                "scale": np.array(self.config["object_info"]["scale"]),
+                                "type": self.config["object_info"]["type"]}
                     self.add_object(object_info=object_info)
-                    
+            
             while simulation_app.is_running():
                 self.env.step(render=True)
                 obs = self.get_proprioception()
@@ -273,7 +312,7 @@ class FrankaSim(OmniBase):
                         target_end_effector_position=obs[target_name]["position"],
                         target_end_effector_orientation=obs[target_name]["orientation"])
                     articulation_controller.apply_action(actions)
-                    if np.mean(np.abs(np.array(end_effector_position)-np.array(obs[target_name]["position"]))<(0.035 / get_stage_units())):
+                    if np.mean(np.abs(np.array(end_effector_position)-np.array(obs[target_name]["position"]))<(0.01 / get_stage_units())):
                         print("Controller is done")
                         reset_count+=1 
                 if reset_count == self.max_count:
