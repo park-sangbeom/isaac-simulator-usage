@@ -1,0 +1,638 @@
+<mujoco>
+    <compiler inertiafromgeom="auto" angle="radian" coordinate="local" meshdir="../meshes/" texturedir="../textures/"/>
+
+    <default>
+        <joint limited="false" solreflimit="0.002 1"/>
+        <site type="sphere" rgba="1 0 0 0.3" size="0.01"/>
+        <tendon rgba="0.45 0.1 0 1" width="0.005"/>
+        <geom rgba="0.6 0.6 0.6 1" contype="1" conaffinity="1" condim="3" margin="0.001" solref=".0004 1" solimp="0.999 0.999 0.001 0.5 2"
+              density="100" friction="1 0.05 0.001"/>
+        <equality solref="0.0004 1" solimp="0.99 0.99 0.001"/>
+        <general ctrlrange="-100 100" ctrllimited="true"/>
+
+    </default>
+
+    <option timestep="0.001" gravity="0 0 -9.81">
+        <flag energy="enable" gravity="enable"/>
+    </option>
+    <size nuser_actuator="2"/>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="512"/>
+        <!--        <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="1 1 1" width="512" height="512"/>-->
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
+                 width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
+        <!--        <texture name="wood" type="2d" file="wood3.jpg"/>-->
+        <material name="matplane" reflectance="0.5" texture="texplane" texrepeat="0.001 0.001" texuniform="true"/>
+        <!--        <material name="wood" texture="wood"/>-->
+        <!-- WAIST -->
+        <mesh name="link_waist_base" file="waist/link_waist_base.STL" />
+        <mesh name="link_waist_lower_pitch" file="waist/link_waist_lower_pitch.STL" />
+        <mesh name="link_waist_upper_pitch" file="waist/link_waist_upper_pitch.STL" />
+        <mesh name="link_waist_upper_roll" file="waist/link_waist_upper_roll.STL" />
+        <mesh name="link_waist_upper_yaw" file="waist/link_waist_upper_yaw.STL" />
+
+        <mesh name="waist_lower_support" file="waist/waist_lower_support.STL" />
+        <mesh name="waist_middle_body" file="waist/waist_middle_body.STL" />
+
+        <mesh name="waist_upper_support_right" file="waist/waist_upper_support_right.STL" />
+        <mesh name="waist_upper_support_left" file="waist/waist_upper_support_left.STL" />
+        <mesh name="waist_pivot_support_lower" file="waist/waist_pivot_support_lower.STL" />
+
+        <mesh name="waist_pivot_support_upper" file="waist/waist_pivot_support_upper.STL" />
+        <mesh name="waist_upperbody_yaw" file="waist/waist_upperbody_yaw.STL" />
+        <mesh name="waist_pivot_back" file="waist/waist_pivot_back.STL" />
+
+
+        <mesh name="spring1_case_stem" file="waist/spring1_case_stem.STL" />
+        <mesh name="waist_spring1_case" file="waist/waist_spring1_case.STL" />
+
+        <mesh name="waist_spring2_case" file="waist/waist_spring2_case.STL" />
+        <mesh name="waist_mainframe_slider" file="waist/waist_mainframe_slider.STL" />
+        <mesh name="spring2_case_stem" file="waist/spring2_case_stem.STL" />
+        <mesh name="spring2_pivot_moving" file="waist/spring2_pivot_moving.STL" />
+
+        <!-- RIGHT ARM -->
+        <mesh name="link_rightarm_body" file="rightarm/link_rightarm_body.STL" />
+        <mesh name="link_rightarm_shoulder_pitch" file="rightarm/link_rightarm_shoulder_pitch.STL" />
+        <mesh name="link_rightarm_shoulder_roll" file="rightarm/link_rightarm_shoulder_roll.STL" />
+        <mesh name="link_rightarm_shoulder_yaw" file="rightarm/link_rightarm_shoulder_yaw.STL" />
+        <mesh name="link_rightarm_elbow" file="rightarm/link_rightarm_elbow.STL" />
+        <mesh name="link_rightarm_lower" file="rightarm/link_rightarm_lower.STL" />
+        <mesh name="link_rightarm_wrist_yaw1" file="rightarm/link_rightarm_wrist_yaw1.STL" />
+        <mesh name="link_rightarm_wrist_pitch1" file="rightarm/link_rightarm_wrist_pitch1.STL" />
+        <mesh name="link_rightarm_wrist_temp1" file="rightarm/link_rightarm_wrist_temp1.STL" />
+        <mesh name="link_rightarm_wrist_pitch2" file="rightarm/link_rightarm_wrist_pitch2.STL" />
+        <mesh name="link_rightarm_wrist_yaw2" file="rightarm/link_rightarm_wrist_yaw2.STL" />
+        <mesh name="link_rightarm_wrist_temp2" file="rightarm/link_rightarm_wrist_temp2.STL" />
+        <mesh name="link_rightarm_wrist_roll" file="rightarm/link_rightarm_wrist_roll.STL" />
+
+        <!-- left ARM -->
+        <mesh name="link_leftarm_body" file="leftarm/link_leftarm_body.STL" />
+        <mesh name="link_leftarm_shoulder_pitch" file="leftarm/link_leftarm_shoulder_pitch.STL" />
+        <mesh name="link_leftarm_shoulder_roll" file="leftarm/link_leftarm_shoulder_roll.STL" />
+        <mesh name="link_leftarm_shoulder_yaw" file="leftarm/link_leftarm_shoulder_yaw.STL" />
+        <mesh name="link_leftarm_elbow" file="leftarm/link_leftarm_elbow.STL" />
+        <mesh name="link_leftarm_lower" file="leftarm/link_leftarm_lower.STL" />
+        <mesh name="link_leftarm_wrist_yaw1" file="leftarm/link_leftarm_wrist_yaw1.STL" />
+        <mesh name="link_leftarm_wrist_pitch1" file="leftarm/link_leftarm_wrist_pitch1.STL" />
+        <mesh name="link_leftarm_wrist_temp1" file="leftarm/link_leftarm_wrist_temp1.STL" />
+        <mesh name="link_leftarm_wrist_pitch2" file="leftarm/link_leftarm_wrist_pitch2.STL" />
+        <mesh name="link_leftarm_wrist_yaw2" file="leftarm/link_leftarm_wrist_yaw2.STL" />
+        <mesh name="link_leftarm_wrist_temp2" file="leftarm/link_leftarm_wrist_temp2.STL" />
+        <mesh name="link_leftarm_wrist_roll" file="leftarm/link_leftarm_wrist_roll.STL" />
+
+        <!-- GRIPPER -->
+<!--        <mesh name="gripper_body" file="gripper_poc/gripper_body.STL"/>-->
+<!--        <mesh name="gripper_link1_left" file="gripper_poc/gripper_link1_left.STL"/>-->
+<!--        <mesh name="gripper_link1_right" file="gripper_poc/gripper_link1_right.STL"/>-->
+<!--        <mesh name="gripper_link2_left" file="gripper_poc/gripper_link2_left.STL"/>-->
+<!--        <mesh name="gripper_link2_right" file="gripper_poc/gripper_link2_right.STL"/>-->
+<!--        <mesh name="gripper_tip_left" file="gripper_poc/gripper_tip_left.STL"/>-->
+<!--        <mesh name="gripper_tip_right" file="gripper_poc/gripper_tip_right.STL"/>-->
+        <mesh name="palm" file="palm/palm.STL"/>
+
+    </asset>
+
+    <!--    <contact>-->
+    <!--        <exclude body1="right_gripper_link1_left" body2="right_gripper"/>-->
+    <!--        <exclude body1="right_gripper_link2_left" body2="right_gripper"/>-->
+    <!--        <exclude body1="right_gripper_link1_left" body2="right_gripper_tip_left"/>-->
+    <!--        <exclude body1="right_gripper_link2_left" body2="right_gripper_tip_left"/>-->
+    <!--        <exclude body1="right_gripper_link1_left" body2="right_gripper_link2_left"/>-->
+
+    <!--        <exclude body1="right_gripper_link1_right" body2="right_gripper"/>-->
+    <!--        <exclude body1="right_gripper_link2_right" body2="right_gripper"/>-->
+    <!--        <exclude body1="right_gripper_link1_right" body2="right_gripper_tip_right"/>-->
+    <!--        <exclude body1="right_gripper_link2_right" body2="right_gripper_tip_right"/>-->
+    <!--        <exclude body1="right_gripper_link1_right" body2="right_gripper_link2_right"/>-->
+
+    <!--        <exclude body1="left_gripper_link1_left" body2="left_gripper"/>-->
+    <!--        <exclude body1="left_gripper_link2_left" body2="left_gripper"/>-->
+    <!--        <exclude body1="left_gripper_link1_left" body2="left_gripper_tip_left"/>-->
+    <!--        <exclude body1="left_gripper_link2_left" body2="left_gripper_tip_left"/>-->
+    <!--        <exclude body1="left_gripper_link1_left" body2="left_gripper_link2_left"/>-->
+
+    <!--        <exclude body1="left_gripper_link1_right" body2="left_gripper"/>-->
+    <!--        <exclude body1="left_gripper_link2_right" body2="left_gripper"/>-->
+    <!--        <exclude body1="left_gripper_link1_right" body2="left_gripper_tip_right"/>-->
+    <!--        <exclude body1="left_gripper_link2_right" body2="left_gripper_tip_right"/>-->
+    <!--        <exclude body1="left_gripper_link1_right" body2="left_gripper_link2_right"/>-->
+    <!--    </contact>-->
+
+    <!--    <include file="asset.xml"/>-->
+
+    <worldbody>
+
+        <body name="link_waist_base" pos="0 0 0" euler="0 0 0">
+
+            <!--            <geom name="link_waist_base" type="mesh" mesh="link_waist_base" mass="10"/>-->
+
+            <!--            <body name="link_waist_lower_pitch" pos="0 0 0" euler="0 0 0">-->
+
+            <!--                <geom name="link_waist_lower_pitch" type="mesh" mesh="link_waist_lower_pitch" mass="1.250"/>-->
+            <!--                <joint name="joint_waist_lower_pitch" type="hinge" pos="0 0 0" axis="0 1 0" limited="true"-->
+            <!--                       range="-1.2217 0"/>-->
+            <!--                <site name="site_waist_mainframe_lower" pos="-0.0 0.01810000 -0.04920000"/>-->
+            <!--            </body>-->
+
+            <!--            <body name="link_waist_spring1_case" pos="-0.0 0.01810000 -0.08230000" euler="0 0 0">-->
+            <!--                <geom name="link_waist_spring1_case" type="mesh" mesh="waist_spring1_case" mass="0.073"/>-->
+            <!--                <joint name="joint_waist_spring1_case" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-10 10"/>-->
+            <!--                <site name="site_waist_lower_spring_sp" pos="0 0 0"/>-->
+
+            <!--                <body name="link_spring1_case_stem" pos="0 0 0.02499799" euler="0 0 0">-->
+            <!--                    <geom name="link_spring1_case_stem" type="mesh" mesh="spring1_case_stem" mass="0.748"/>-->
+            <!--                    <joint name="joint_spring1_case_stem" type="slide" pos="0 0 0" axis="0 0 1" limited="true"-->
+            <!--                           range="-10 10"/>-->
+            <!--                    <site name="site_spring1_case_stem" pos="0 0 0"/>-->
+            <!--                    <site name="site_waist_lower_spring_ep" pos="0 0 -0.165"/>-->
+            <!--                </body>-->
+            <!--            </body>-->
+
+            <!--            <body name="link_waist_lower_support" pos="-0.11276475 0 -0.04104073" euler="0 0 0">-->
+            <!--                <geom name="link_waist_lower_support" type="mesh" mesh="waist_lower_support" mass="1.24"/>-->
+            <!--                <joint name="joint_waist_lower_support" type="hinge" pos="0 0 0" axis="0 1 0" limited="true" range="-10 10"/>-->
+
+            <!--                <body name="link_waist_middle_body" pos="0 0 0.3" euler="0 0 0">-->
+            <!--                    <geom name="link_waist_middle_body" type="mesh" mesh="waist_middle_body" mass="2.948"/>-->
+            <!--                    <joint name="joint_waist_middle_body" type="hinge" pos="0 0 0" axis="0 1 0" limited="true"-->
+            <!--                           range="-10 10"/>-->
+
+            <!--                    <body name="link_spring2_pivot_moving" pos="-0.00388957 0 0.04492536" euler="0 0 0">-->
+            <!--                        <geom name="link_spring2_pivot_moving" type="mesh" mesh="spring2_pivot_moving" mass="0.296"/>-->
+            <!--                        <joint name="joint_spring2_pivot_moving" type="hinge" pos="0 0 0" axis="1 0 0" limited="true"-->
+            <!--                               range="-10 10"/>-->
+
+            <!--                        <body name="link_waist_spring2_case" pos="-0.04 0 0" euler="0 0 0">-->
+            <!--                            <geom name="link_waist_spring2_case" type="mesh" mesh="waist_spring2_case" mass="0.073"/>-->
+            <!--                            <joint name="joint_waist_spring2_case" type="hinge" pos="0 0 0" axis="0 1 0" limited="true"-->
+            <!--                                   range="-10 10"/>-->
+            <!--                            <site name="site_waist_upper_spring_sp" pos="0 0 0"/>-->
+
+            <!--                            <body name="link_spring2_case_stem" pos="0 0 0.025" euler="0 0 0">-->
+            <!--                                <geom name="link_spring2_case_stem" type="mesh" mesh="spring2_case_stem" mass="1.036"/>-->
+            <!--                                <joint name="joint_spring2_case_stem" type="slide" pos="0 0 0" axis="0 0 1" limited="true"-->
+            <!--                                       range="-10 10"/>-->
+            <!--                                <joint name="joint_spring2_case_stem1" type="hinge" pos="0 0 0" axis="0 0 1" limited="true"-->
+            <!--                                       range="-10 10"/>-->
+            <!--                                <site name="site_spring2_case_stem1" pos="0 0.01 0"/>-->
+            <!--                                <site name="site_spring2_case_stem2" pos="0 -0.01 0"/>-->
+            <!--                                <site name="site_waist_upper_spring_ep" pos="0 0 -0.165"/>-->
+            <!--                            </body>-->
+            <!--                        </body>-->
+            <!--                    </body>-->
+
+            <!--                    <body name="link_waist_upper_pitch" pos="-0.04378764 0 0.11892383" euler="0 0 0">-->
+            <!--                        <geom name="link_waist_upper_pitch" type="mesh" mesh="link_waist_upper_pitch"-->
+            <!--                              mass="0.178"/>-->
+            <!--                        <joint name="joint_waist_upper_pitch" type="hinge" pos="0 0 0" axis="0 1 0" limited="true"-->
+            <!--                               range="-0 1.3090"/>-->
+
+            <!--                        <body name="link_waist_upper_roll" pos="0 0 0" euler="0 0 0">-->
+
+            <!--                            <geom name="link_waist_upper_roll" type="mesh" mesh="link_waist_upper_roll" mass="2.943"/>-->
+            <!--                            <joint name="joint_waist_upper_roll" type="hinge" pos="0 0 0" axis="1 0 0" limited="true"-->
+            <!--                                   range="-0.61087 0.61087"/>-->
+
+            <!--                            <body name="link_waist_mainframe_slider" pos="0.02029666 0 0.00014092" euler="0 -0.87266 0">-->
+            <!--                                <geom name="link_waist_mainframe_slider" type="mesh" mesh="waist_mainframe_slider"-->
+            <!--                                      mass="0.229"/>-->
+            <!--                                <joint name="joint_waist_mainframe_slider" type="hinge" pos="0 0 0" axis="1 0 0"-->
+            <!--                                       limited="true" range="-10 10"/>-->
+            <!--                                <site name="site_waist_mainframe_slider1" pos="-0.03200000 0.01 0"/>-->
+            <!--                                <site name="site_waist_mainframe_slider2" pos="-0.03200000 -0.01 0"/>-->
+            <!--                            </body>-->
+
+            <!--                            <body name="link_waist_pivot_back" pos="0 0 0.35" euler="0 0 0">-->
+            <!--                                <geom name="link_waist_pivot_back" type="mesh" mesh="waist_pivot_back" mass="0.153"/>-->
+            <!--                                <joint name="joint_waist_pivot_back" type="hinge" pos="0 0 0" axis="1 0 0" limited="true"-->
+            <!--                                       range="-10 10"/>-->
+
+            <!--                                <body name="link_waist_upperbody_yaw" pos="0.13155867 0 -0.04788246" euler="0 0 0">-->
+            <!--                                    <geom name="link_waist_upperbody_yaw" type="mesh" mesh="waist_upperbody_yaw"-->
+            <!--                                          mass="1.899"/>-->
+            <!--                                    <joint name="joint_waist_upperbody_yaw" type="hinge" pos="-0.13155867 0 0.04788246"-->
+            <!--                                           axis="0 1 0" limited="true" range="-10 10"/>-->
+
+            <body name="link_waist_upper_yaw" pos="-0.03600000 0 0.16671" euler="0 0 0">
+
+                <geom name="link_waist_upper_yaw" type="mesh" mesh="link_waist_upper_yaw" mass="2.404"/>
+                <geom name="cg_link_waist_upper_yaw" type="mesh" mesh="link_waist_upper_yaw" mass="0.0" conaffinity="0" contype="0"/>
+                <!--                                        <geom name="link_waist_upper_yaw" type="box" size="0.01 0.01 0.01" mass="2.404"/>-->
+                <!--                                        <joint name="joint_waist_upper_yaw" type="hinge" pos="0 0 0" axis="0 0 1"-->
+                <!--                                               limited="true" range="-2.9671 2.9671"/>-->
+
+                <!--                                        <camera name="head_mount" mode="fixed" pos="0.18 0 0.14`" euler="0.0 -0.55 -1.57079632679" fovy="59"/>-->
+
+                <!--RIGHT_ARM-->
+                <body name="link_rightarm_body" pos="0.112 -0.24275 0.083"
+                      euler="0 0 0">
+                    <geom name="link_rightarm_body" type="mesh" mesh="link_rightarm_body"
+                          mass="0.001"/>
+
+                    <body name="link_rightarm_shoulder_pitch" pos="0 0 0" euler="0 0 0">
+                        <inertial mass="1.85413349046082" pos="-0.1655166149291789 0.004105937166583983 -0.012961277368584817" fullinertia="0.00829844522548199 0.011141764670400352 0.014501395094426058 -0.005680817030168676 0.003350239962872264 0.0026862789957515123"/>
+                        <geom conaffinity="0" contype="0" name="link_rightarm_shoulder_pitch" type="mesh" mesh="link_rightarm_shoulder_pitch"
+                              mass="1.01031956792032"/>
+                        <!--                                                    <geom conaffinity="0" contype="0" name="cg_link_rightarm_shoulder_pitch" type="mesh" mesh="link_rightarm_shoulder_pitch"-->
+                        <!--                                                          mass="0.0"/>-->
+                        <joint name="joint_rightarm_shoulder_pitch" type="hinge" pos="0 0 0"
+                               axis="0 0.88295 -0.46947" limited="true" range="-3.6651906666666667 1.570796" frictionloss="1.0" armature="0.02"/>
+
+                        <body name="link_rightarm_shoulder_roll" pos="0 0 0" euler="0 0 0">
+                            <inertial mass="0.424588158645723" pos="-0.05552978802152494 0.007775368258203296 0.010645631087533865" fullinertia="0.0013081624867111682 0.002777302771048175 0.002699569894656668 -8.94191262361155e-06 -0.0004921314524267849 -2.5741899443796925e-05"/>
+                            <geom conaffinity="0" contype="0" name="link_rightarm_shoulder_roll" type="mesh" mesh="link_rightarm_shoulder_roll"
+                                  mass="0.65140719072388"/>
+                            <!--                                                        <geom conaffinity="0" contype="0" name="cg_rightarm_shoulder_roll" type="mesh" mesh="link_rightarm_shoulder_roll"-->
+                            <!--                                                              mass="0.0"/>-->
+                            <joint name="joint_rightarm_shoulder_roll" type="hinge" pos="0 0 0"
+                                   axis="1 0 0" limited="true" range="-3.6651906666666667 0.22689275555555558"  frictionloss="1.0" armature="0.02"/>
+
+                            <body name="link_rightarm_shoulder_yaw" pos="0 0 0" euler="0 0 0">
+                                <inertial mass="1.89925284784493" pos="-0.0051857270979220405 -0.0045361863757441305 -0.18624956730019326" fullinertia="0.008937340729079896 0.008914387352065817 0.0016206535229886232 -4.7267197787678264e-06 -0.0002269043233019579 -0.00021596494929611364"/>
+
+                                <geom conaffinity="0" contype="0" name="link_rightarm_shoulder_yaw" type="mesh" mesh="link_rightarm_shoulder_yaw"
+                                      mass="0.940353944378616"/>
+                                <!--                                                            <geom conaffinity="0" contype="0" name="cg_link_rightarm_shoulder_yaw" type="mesh" mesh="link_rightarm_shoulder_yaw"-->
+                                <!--                                                                  mass="0.0"/>-->
+                                <joint name="joint_rightarm_shoulder_yaw" type="hinge" pos="0 0 0"
+                                       axis="0 0 1" limited="true" range="-1.570796 1.570796" frictionloss="0.8"  armature="0.02"/>
+
+                                <body name="link_rightarm_elbow_pitch1" pos="0 0 -0.315" euler="0 0 0">
+                                    <inertial mass="0.295544779295358" pos="0.022285418182438618 -0.0012025274924415256 -0.03235095172013784" fullinertia="0.00021984453940356464 0.0001337935836330882 0.0002161733268170821 -6.441592343700457e-07 4.899067020791543e-05 -1.9807537472225636e-06"/>
+                                    <geom conaffinity="0" contype="0" name="link_rightarm_elbow_pitch1" type="mesh" mesh="link_rightarm_elbow"
+                                          mass="0.140301792456264"/>
+                                    <!--                                                                <geom conaffinity="0" contype="0" name="cg_link_rightarm_elbow_pitch1" type="mesh" mesh="link_rightarm_elbow"-->
+                                    <!--                                                                      mass="0.0"/>-->
+                                    <joint name="joint_rightarm_elbow_pitch1" type="hinge" pos="0 0 0"
+                                           axis="0 1 0" limited="true" range="-0.567231888888889 0.567231888888889" frictionloss="1.3" armature="0.0245"/>
+
+                                    <body name="link_rightarm_elbow_pitch2" pos="0.05656854 0 -0.05656854" euler="0 0 0">
+                                        <inertial mass="1.49734929957395" pos="0.06372429446090531 -0.004272308496189638 -0.009483639515836355" fullinertia="0.00046394617001695496 0.0014892055839474195 0.00150118465045522 2.7711969545246204e-06 -6.090466596750995e-05 2.9758137671399883e-06"/>
+
+                                        <geom name="link_rightarm_elbow_pitch2" type="mesh" mesh="link_rightarm_lower"
+                                              mass="0.39640501626" />
+                                        <geom conaffinity="0" contype="0" name="cg_link_rightarm_elbow_pitch2" type="mesh" mesh="link_rightarm_lower"
+                                              mass="0.0" />
+                                        <joint name="joint_rightarm_elbow_pitch2" type="hinge" pos="0 0 0"
+                                               axis="0 1 0" limited="true" range="-0.567231888888889 0.567231888888889" armature="0.0245"/>
+
+
+
+                                        <body name="link_rightarm_wrist_yaw1" pos="0.212 0 0" euler="0 0 0">
+                                            <!--                                                                        <inertial mass="0.00133466872925409" pos="6.629308871320554e-08 -6.8012457631294e-07 -1.1613797039099994e-05" fullinertia="1.1852704880247002e-08 9.50755913275947e-09 -1.7412063491091366e-10 7.752772010824772e-10 -3.4390790026769175e-09 -3.956662633961255e-09"/>-->
+                                            <geom conaffinity="0" contype="0" name="link_rightarm_wrist_yaw1" type="mesh" mesh="link_rightarm_wrist_yaw1"
+                                                  mass="0.001"/>
+                                            <!--                                                                        <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_yaw1" type="mesh" mesh="link_rightarm_wrist_yaw1"-->
+                                            <!--                                                                              mass="0.0"/>-->
+                                            <joint name="joint_rightarm_wrist_yaw1" type="hinge" pos="0 0 0"
+                                                   axis="0 0.707 0.707" limited="true" range="-0.785398 0.785398" frictionloss="0.75" armature="0.0052"/>
+
+                                            <body name="link_rightarm_wrist_pitch1" pos="0 0 0" euler="0 0 0">
+                                                <!--                                                                            <inertial mass="0.00133272051783349" pos="0.04498010301606442 -5.524879908465436e-06 -0.0005405970986657841" fullinertia="1.8907970960877e-08 1.168190036038218e-06 1.173253206981984e-06 -8.439220596288669e-10 1.219319197493618e-08 -4.944146056213628e-10"/>-->
+                                                <geom conaffinity="0" contype="0" name="link_rightarm_wrist_pitch1"  type="mesh" mesh="link_rightarm_wrist_pitch1"
+                                                      mass="0.001"/>
+                                                <!--                                                                            <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_pitch1" type="mesh" mesh="link_rightarm_wrist_pitch1"-->
+                                                <!--                                                                                  mass="0.0"/>-->
+                                                <joint name="joint_rightarm_wrist_pitch1" type="hinge" pos="0 0 0"
+                                                       axis="0 0.707 -0.707" limited="true" range="-0.785398 0.785398" frictionloss="0.75" armature="0.0052"/>
+
+                                                <geom conaffinity="0" contype="0" name="link_rightarm_wrist_temp1" type="mesh" mesh="link_rightarm_wrist_temp1"
+                                                      mass="0.001"/>
+                                                <!--                                                                                <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_temp1" type="mesh" mesh="link_rightarm_wrist_temp1"-->
+                                                <!--                                                                                  mass="0.0"/>-->
+
+                                                <body name="link_rightarm_wrist_pitch2" pos="0.090 0 0" euler="0 0 0">
+                                                    <!--                                                                                    <inertial mass="0.00133066216055985" pos="3.2542192345290748e-06 -1.4792527797365863e-06 -1.6477974532844465e-06" fullinertia="5.476795392191304e-09 -4.812687497660928e-09 -1.0728346172293719e-08 -1.0203520927551756e-09 1.0379986604011081e-09 5.628631102861243e-09"/>-->
+                                                    <geom conaffinity="0" contype="0" name="link_rightarm_wrist_pitch2"  type="mesh" mesh="link_rightarm_wrist_pitch2"
+                                                          mass="0.001"/>
+                                                    <!--                                                                                    <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_pitch2" type="mesh" mesh="link_rightarm_wrist_pitch2"-->
+                                                    <!--                                                                                          mass="0.0"/>-->
+                                                    <joint name="joint_rightarm_wrist_pitch2" type="hinge" pos="0 0 0"
+                                                           axis="0 0.707 -0.707" limited="true" range="-0.785398 0.785398" armature="0.0052"/>
+
+                                                    <body name="link_rightarm_wrist_yaw2" pos="0 0 0" euler="0 0 0">
+                                                        <geom conaffinity="0" contype="0" name="link_rightarm_wrist_yaw2" type="mesh" mesh="link_rightarm_wrist_yaw2"
+                                                              mass="0.001"/>
+                                                        <!--                                                                                        <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_yaw2" type="mesh" mesh="link_rightarm_wrist_yaw2"-->
+                                                        <!--                                                                                              mass="0.0"/>-->
+                                                        <joint name="joint_rightarm_wrist_yaw2" type="hinge" pos="0 0 0"
+                                                               axis="0 0.707 0.707" limited="true" range="-0.785398 0.785398" armature="0.0052"/>
+
+                                                        <!--                                                                                        <body name="link_rightarm_wrist_temp2" pos="0 0 0" euler="0 0 0">-->
+                                                        <inertial mass="0.169607909807618" pos="0.010735753651422719 -0.0035598024664914322 -0.003076561195091909" fullinertia="0.0002459256419549255 0.00016977766851803897 0.00017170030083909373 4.616798003030927e-07 3.085279325764438e-07 1.091253899840118e-06"/>
+                                                        <geom conaffinity="0" contype="0" name="link_rightarm_wrist_temp2"  type="mesh" mesh="link_rightarm_wrist_temp2"
+                                                              mass="0.290228823475001"/>
+                                                        <!--                                                                                            <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_temp2" type="mesh" mesh="link_rightarm_wrist_temp2"-->
+                                                        <!--                                                                                              mass="0.0"/>-->
+
+
+
+                                                        <body name="link_rightarm_wrist_roll" pos="0 0 0" euler="0 0 0">
+                                                            <inertial mass="0.246681498713609" pos="0.0056496022851009 5.468998139185833e-05 -0.017205809736788567" fullinertia="0.002146148859895359 0.001866681989391166 0.0022085004730872902 -2.4936553376121568e-05 5.105600985687332e-05 8.453842105571714e-05"/>
+
+
+                                                            <geom name="link_rightarm_wrist_roll" type="mesh" mesh="link_rightarm_wrist_roll"
+                                                                  mass="0.0"/>
+                                                            <geom conaffinity="0" contype="0" name="cg_link_rightarm_wrist_roll" type="mesh" mesh="link_rightarm_wrist_roll"
+                                                                  mass="0.0"/>
+                                                            <joint name="joint_rightarm_wrist_roll" type="hinge" pos="0 0 0"
+                                                                   axis="1 0 0" limited="true" range="-1.570796 1.570796" frictionloss="0.24" armature="0.0007"/>
+                                                            <body name="right_EF" pos="-0.045 0 0"/>
+                                                            <!-- GRIPPER -->
+<!--                                                            <body name="right_gripper" pos="0.055 0 0">-->
+<!--                                                                <inertial pos="0.040000000000000001 0 0" mass="1.57" fullinertia="2.0000000000000002e-05 2.0000000000000002e-05 2.0000000000000002e-05 0 0 0"/>-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="right_gripper_tc" class="/" type="cylinder" size="0.034000000000000002" density="1.0" fromto="0 0 0 -0.038899999999999997 0 0"/>&ndash;&gt;-->
+<!--                                                                <geom name="right_palm"  type="box" size="0.050000000000000003 0.01 0.050000000000000003" density="1000.0" pos="0.0 0.050000000000000003 0"/>-->
+<!--                                                                <geom contype="0" conaffinity="0" name="cg_right_palm"  type="box" size="0.050000000000000003 0.01 0.050000000000000003" mass="0.0" pos="0.0 0.050000000000000003 0"/>-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="right_palmcon1" type="capsule"  size="0.034000000000000002 0.035" density="1000.0" pos="0.070000000000000007 0 0"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom contype="0" conaffinity="0" name="cg_right_palmcon1" type="capsule"  size="0.034000000000000002 0.035" mass="0.0" pos="0.070000000000000007 0 0"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom contype="0" conaffinity="0" name="cg_right_palmcon1" type="capsule"  size="0.034000000000000002 0.035" mass="0.0" pos="0.070000000000000007 0 0"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="right_palmcon2"  type="sphere"  size="0.034000000000000002" mass="1.0" pos="0.070000000000000007 0 0" rgba="1 0 0 1"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom contype="0" conaffinity="0" name="cg_right_palmcon2"  type="sphere"  size="0.034000000000000002" density="1000.0" pos="0.070000000000000007 0 0"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="right_palmcon3" type="cylinder"  size="0.034000000000000002" density="1000.0" fromto="0.070000000000000007 0 0 0.070000000000000007 0.050000000000000003 0"/>&ndash;&gt;-->
+<!--                                                            </body>-->
+                                                            <body name="right_gripper" pos="0.05 0.05 0">
+                                                                <geom name="right_palm" type="mesh" mass="0.5" mesh="palm" pos="-0.05 -0.05 0"/>
+                                                                <geom contype="0" conaffinity="0" name="cg_right_palm" type="mesh" mass="0.0" mesh="palm" pos="-0.05 -0.05 0"/>
+                                                            </body>
+
+                                                            <!-- GRIPPER -->
+
+
+                                                        </body>
+                                                        <!--                                                                                        </body>-->
+                                                    </body>
+                                                </body>
+                                                <!--                                                                            </body>-->
+                                            </body>
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <!--left_ARM-->
+                <body name="link_leftarm_body" pos="0.112 0.24275 0.083"
+                      euler="0 0 0">
+                    <geom name="link_leftarm_body" type="mesh" mesh="link_leftarm_body"
+                          mass="0.001"/>
+
+                    <body name="link_leftarm_shoulder_pitch" pos="0 0 0" euler="0 0 0">
+                        <inertial mass="1.82896418594429" pos="-0.17446217665039193 -0.005653457712311188 -0.005633750793582765" fullinertia="0.008509758365907451 0.012295983838971535 0.015618313916171599 0.006149165416821267 0.0037558660398046726 -0.002862527072466761"/>
+                        <geom contype="0" conaffinity="0" name="link_leftarm_shoulder_pitch" type="mesh" mesh="link_leftarm_shoulder_pitch"
+                              mass="1.01031956792032"/>
+                        <!--                                                    <geom contype="0" conaffinity="0" name="cg_link_leftarm_shoulder_pitch" type="mesh" mesh="link_leftarm_shoulder_pitch"-->
+                        <!--                                                          mass="0.0"/>-->
+                        <joint name="joint_leftarm_shoulder_pitch" type="hinge" pos="0 0 0"
+                               axis="0 0.88295 0.46947" limited="true" range="-3.6651906666666667 1.570796" frictionloss="1.0" armature="0.02"/>
+
+                        <body name="link_leftarm_shoulder_roll" pos="0 0 0" euler="0 0 0">
+                            <inertial mass="0.445918908538433" pos="-0.05065951850353998 -0.012855975035655649 0.013753192626416385" fullinertia="0.0013373456335346635 0.002926624599805538 0.002825524270625531 8.673513451005972e-05 -0.0005414326791990992 3.9465299254967624e-05"/>
+                            <geom contype="0" conaffinity="0" name="link_leftarm_shoulder_roll" type="mesh" mesh="link_leftarm_shoulder_roll"
+                                  mass="0.65140719072388"/>
+                            <!--                                                        <geom contype="0" conaffinity="0" name="cg_link_leftarm_shoulder_roll" type="mesh" mesh="link_leftarm_shoulder_roll"-->
+                            <!--                                                              mass="0.0"/>-->
+                            <joint name="joint_leftarm_shoulder_roll" type="hinge" pos="0 0 0"
+                                   axis="1 0 0" limited="true" range="-0.22689275555555558 3.6651906666666667" frictionloss="1.0" armature="0.02"/>
+
+                            <body name="link_leftarm_shoulder_yaw" pos="0 0 0" euler="0 0 0">
+                                <inertial mass="1.53364674168604" pos="-0.004402626682085005 0.0036425820084694414 -0.21111430731974812" fullinertia="0.011731316053230592 0.011669874599438551 0.0016619276188938414 3.751018029493584e-05 -0.00026277193982206866 0.0005811447919304425"/>
+
+                                <geom contype="0" conaffinity="0" name="link_leftarm_shoulder_yaw" type="mesh" mesh="link_leftarm_shoulder_yaw"
+                                      mass="0.940353944378616"/>
+                                <geom contype="0" conaffinity="0" name="cg_link_leftarm_shoulder_yaw" type="mesh" mesh="link_leftarm_shoulder_yaw"
+                                      mass="0.0"/>
+                                <joint name="joint_leftarm_shoulder_yaw" type="hinge" pos="0 0 0"
+                                       axis="0 0 1" limited="true" range="-1.570796 1.570796" frictionloss="0.8"  armature="0.02"/>
+
+                                <body name="link_leftarm_elbow_pitch1" pos="0 0 -0.315" euler="0 0 0">
+                                    <inertial mass="0.406524012920147" pos="0.022332632125105775 0.002354534881775148 -0.03237428855990945" fullinertia="0.00022071394648462205 0.00013460040727403873 0.00021695542509713066 -1.1636373610543309e-06 4.938381528783926e-05 -1.1138389104528892e-06"/>
+                                    <geom contype="0" conaffinity="0" name="link_leftarm_elbow_pitch1" type="mesh" mesh="link_leftarm_elbow"
+                                          mass="0.140301792456264"/>
+                                    <!--                                                                <geom contype="0" conaffinity="0" name="cg_link_leftarm_elbow_pitch1" type="mesh" mesh="link_leftarm_elbow"-->
+                                    <!--                                                                      mass="0.0"/>-->
+                                    <joint name="joint_leftarm_elbow_pitch1" type="hinge" pos="0 0 0"
+                                           axis="0 1 0" limited="true" range="-0.567231888888889 0.567231888888889" frictionloss="1.3" armature="0.0245"/>
+
+                                    <body name="link_leftarm_elbow_pitch2" pos="0.05656854 0 -0.05656854" euler="0 0 0">
+                                        <inertial mass="1.40374419317801" pos="0.05564463418615375 0.0021157238896309938 -0.009759040743667527" fullinertia="0.0004712153114488001 0.0015994252176869507 0.0016067667109151088 3.541420203667027e-07 -6.538372243138015e-05 8.651489413886251e-06"/>
+                                        <geom name="link_leftarm_elbow_pitch2" type="mesh" mesh="link_leftarm_lower"/>
+                                        <geom contype="0" conaffinity="0" name="cg_link_leftarm_elbow_pitch2" type="mesh" mesh="link_leftarm_lower"
+                                              mass="0.0" />
+                                        <joint name="joint_leftarm_elbow_pitch2" type="hinge" pos="0 0 0"
+                                               axis="0 1 0" limited="true" range="-0.567231888888889 0.567231888888889" armature="0.0245"/>
+
+
+                                        <body name="link_leftarm_wrist_yaw1" pos="0.212 0 0" euler="0 0 0">
+                                            <inertial mass="0.00133390498200434" pos="7.581961039881397e-07 1.5364243059777718e-06 -7.708076667129164e-06" fullinertia="1.5794762043054672e-08 1.546263061598911e-08 5.434050582253584e-09 7.707530239180057e-10 1.456225168724684e-09 2.503269624906164e-09"/>
+                                            <geom contype="0" conaffinity="0" name="link_leftarm_wrist_yaw1" type="mesh" mesh="link_leftarm_wrist_yaw1"
+                                                  mass="0.001"/>
+                                            <!--                                                                        <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_yaw1" type="mesh" mesh="link_leftarm_wrist_yaw1"-->
+                                            <!--                                                                              mass="0.0"/>-->
+                                            <joint name="joint_leftarm_wrist_yaw1" type="hinge" pos="0 0 0"
+                                                   axis="0 0.707 0.707" limited="true" range="-0.785398 0.785398" frictionloss="0.75" armature="0.0052"/>
+
+                                            <body name="link_leftarm_wrist_pitch1" pos="0 0 0" euler="0 0 0">
+                                                <!--                                                                            <inertial mass="0.00133210004581951" pos="0.04498734426399387 -7.003830823481498e-06 -0.0005235066678186383" fullinertia="-1.2309838988965206e-08 1.1328526817470352e-06 1.1684307937216571e-06 -2.9615792601214368e-09 2.0404183991293277e-08 -8.895317887182448e-09"/>-->
+                                                <geom contype="0" conaffinity="0" name="link_leftarm_wrist_pitch1" type="mesh" mesh="link_leftarm_wrist_pitch1"
+                                                      mass="0.001"/>
+                                                <!--                                                                            <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_pitch1" type="mesh" mesh="link_leftarm_wrist_pitch1"-->
+                                                <!--                                                                                  mass="0.0"/>-->
+                                                <joint name="joint_leftarm_wrist_pitch1" type="hinge" pos="0 0 0"
+                                                       axis="0 0.707 -0.707" limited="true" range="-0.785398 0.785398" frictionloss="0.75" armature="0.0052"/>
+
+                                                <!--                                                                            <body name="link_leftarm_wrist_temp1" pos="0 0 0" euler="0 0 0">-->
+                                                <geom contype="0" conaffinity="0" name="link_leftarm_wrist_temp1" type="mesh" mesh="link_leftarm_wrist_temp1"
+                                                      mass="0.001"/>
+                                                <!--                                                                                <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_temp1" type="mesh" mesh="link_leftarm_wrist_temp1"-->
+                                                <!--                                                                                  mass="0.0"/>-->
+
+                                                <body name="link_leftarm_wrist_pitch2" pos="0.090 0 0" euler="0 0 0">
+                                                    <!--                                                                                    <inertial mass="0.00133077372309534" pos="-2.4389324209457e-06 2.2579343709346285e-07 -1.3318777244155569e-06" fullinertia="3.8254140910982026e-10 -2.4363110591205474e-09 5.506167913907947e-10 1.7456455924867521e-09 2.5982728011686656e-09 -9.256741719680648e-11"/>-->
+                                                    <geom contype="0" conaffinity="0" name="link_leftarm_wrist_pitch2" type="mesh" mesh="link_leftarm_wrist_pitch2"
+                                                          mass="0.001"/>
+                                                    <!--                                                                                    <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_pitch2" type="mesh" mesh="link_leftarm_wrist_pitch2"-->
+                                                    <!--                                                                                          mass="0.0"/>-->
+                                                    <joint name="joint_leftarm_wrist_pitch2" type="hinge" pos="0 0 0"
+                                                           axis="0 0.707 -0.707" limited="true" range="-0.785398 0.785398" armature="0.0052"/>
+
+                                                    <body name="link_leftarm_wrist_yaw2" pos="0 0 0" euler="0 0 0">
+                                                        <geom contype="0" conaffinity="0" name="link_leftarm_wrist_yaw2" type="mesh" mesh="link_leftarm_wrist_yaw2"
+                                                              mass="0.001"/>
+                                                        <!--                                                                                        <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_yaw2" type="mesh" mesh="link_leftarm_wrist_yaw2"-->
+                                                        <!--                                                                                              mass="0.0"/>-->
+                                                        <joint name="joint_leftarm_wrist_yaw2" type="hinge" pos="0 0 0"
+                                                               axis="0 0.707 0.707" limited="true" range="-0.785398 0.785398" armature="0.0052"/>
+
+                                                        <!--                                                                                        <body name="link_leftarm_wrist_temp2" pos="0 0 0" euler="0 0 0">-->
+                                                        <inertial mass="0.175461295820374" pos="0.011097769837842516 0.0015804376856799157 -0.00436087677523092" fullinertia="0.00024824920154117045 0.00017200877377596214 0.00017218670709037565 8.415865429809728e-08 3.1857033323034094e-07 2.3218083434473857e-06"/>
+                                                        <geom contype="0" conaffinity="0" name="link_leftarm_wrist_temp2" type="mesh" mesh="link_leftarm_wrist_temp2"
+                                                              mass="0.290228823475001"/>
+                                                        <!--                                                                                            <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_temp2" type="mesh" mesh="link_leftarm_wrist_temp2"-->
+                                                        <!--                                                                                              mass="0.0"/>-->
+
+
+                                                        <body name="link_leftarm_wrist_roll" pos="0 0 0" euler="0 0 0">
+                                                            <inertial mass="0.327820152079981" pos="0.011361037472709251 -0.014965290510916641 -0.030452240576707833" fullinertia="0.002095698283594392 0.002174220453858769 0.0020369252263009014 -2.572969510444121e-05 -1.7736335903025847e-05 0.00011130572005365989"/>
+
+                                                            <geom name="link_leftarm_wrist_roll" type="mesh" mesh="link_leftarm_wrist_roll"
+                                                                  mass="0.0" />
+                                                            <geom contype="0" conaffinity="0" name="cg_link_leftarm_wrist_roll" type="mesh" mesh="link_leftarm_wrist_roll"
+                                                                  mass="0.0" />
+                                                            <joint name="joint_leftarm_wrist_roll" type="hinge" pos="0 0 0"
+                                                                   axis="1 0 0" limited="true" range="-1.570796 1.570796" frictionloss="0.24" armature="0.0007"/>
+
+                                                            <body name="left_EF" pos="-0.045 0 0"/>
+
+                                                            <!-- GRIPPER -->
+<!--                                                            <body name="left_gripper" pos="0.055 0 0">-->
+<!--                                                                <inertial pos="0.040000000000000001 0 0" mass="1.57" fullinertia="2.0000000000000002e-05 2.0000000000000002e-05 2.0000000000000002e-05 0 0 0"/>-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="left_gripper_tc" class="/" type="cylinder"  size="0.034000000000000002" density="1.0" fromto="0 0 0 -0.038899999999999997 0 0"/>&ndash;&gt;-->
+<!--                                                                <geom name="left_palm" type="box"  size="0.050000000000000003 0.01 0.050000000000000003" density="1000.0" pos="0.0 -0.050000000000000003 0"/>-->
+<!--                                                                <geom contype="0" conaffinity="0" name="cg_left_palm" type="box"  size="0.050000000000000003 0.01 0.050000000000000003" mass="0.0" pos="0.0 -0.050000000000000003 0"/>-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="left_palmcon1" class="/" type="cylinder"  size="0.034000000000000002" density="1000.0" fromto="0 0 0 0.070000000000000007 0 0"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="left_palmcon2" type="sphere"  size="0.034000000000000002" density="1000.0" pos="0.070000000000000007 0 0"/>&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                                                    <geom name="left_palmcon3" class="/" type="cylinder"  size="0.034000000000000002" density="1000.0" fromto="0.070000000000000007 0 0 0.070000000000000007 -0.050000000000000003 0"/>&ndash;&gt;-->
+<!--                                                            </body>-->
+                                                            <body name="left_gripper" pos="0.05 -0.05 0">
+                                                                <geom name="left_palm" type="mesh" mass="0.5" mesh="palm" euler="3.141592 0 0" pos="-0.05 0.05 0"/>
+                                                                <geom contype="0" conaffinity="0" name="cg_left_palm" type="mesh" mass="0.0" mesh="palm" euler="3.141592 0 0" pos="-0.05 0.05 0"/>
+                                                            </body>
+
+                                                            <!-- GRIPPER -->
+
+
+
+
+                                                        </body>
+                                                        <!--                                                                                        </body>-->
+                                                    </body>
+                                                </body>
+                                                <!--                                                                            </body>-->
+                                            </body>
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <!--                                </body>-->
+            <!--                            </body>-->
+            <!--                        </body>-->
+            <!--                    </body>-->
+
+            <!--                    <body name="link_waist_pivot_support_lower" pos="0.08776739 0 0.07104253" euler="0 0 0">-->
+            <!--                        <geom name="link_waist_pivot_support_lower" type="mesh" mesh="waist_pivot_support_lower"-->
+            <!--                              mass="0.131"/>-->
+            <!--                        <joint name="joint_waist_pivot_support_lower" type="hinge" pos="0 0 0" axis="0 1 0" limited="true"-->
+            <!--                               range="-10 10"/>-->
+
+            <!--                        <body name="link_waist_upper_support_left" pos="0 0.09 0 " euler="0 0 0">-->
+            <!--                            <geom name="link_waist_upper_support_left" type="mesh" mesh="waist_upper_support_left"-->
+            <!--                                  mass="0.453"/>-->
+            <!--                            <joint name="joint_waist_upper_support_left" type="hinge" pos="0 0 0" axis="1 0 0" limited="true"-->
+            <!--                                   range="-10 10"/>-->
+            <!--                        </body>-->
+
+            <!--                        <body name="link_waist_upper_support_right" pos="0 -0.09 0" euler="0 0 0">-->
+            <!--                            <geom name="link_waist_upper_support_right" type="mesh" mesh="waist_upper_support_right"-->
+            <!--                                  mass="0.453"/>-->
+            <!--                            <joint name="joint_waist_upper_support_right" type="hinge" pos="0 0 0" axis="1 0 0" limited="true"-->
+            <!--                                   range="-10 10"/>-->
+
+            <!--                            <body name="link_waist_pivot_support_upper" pos="0 0.09 0.35" euler="0 0 0">-->
+            <!--                                <geom name="link_waist_pivot_support_upper" type="mesh" mesh="waist_pivot_support_upper"-->
+            <!--                                      mass="0.131"/>-->
+            <!--                                <joint name="joint_waist_pivot_support_upper" type="hinge" pos="0 -0.09 0" axis="1 0 0"-->
+            <!--                                       limited="true" range="-10 10"/>-->
+            <!--                            </body>-->
+            <!--                        </body>-->
+            <!--                    </body>-->
+            <!--                </body>-->
+            <!--            </body>-->
+        </body>
+
+    </worldbody>
+    <!--    <tendon>-->
+    <!--        <fixed name="left_elbow" limited="true" range="-0.0000001 0.00000001">-->
+    <!--            <joint joint="joint_leftarm_elbow_pitch1" coef="1.0"/>-->
+    <!--            <joint joint="joint_leftarm_elbow_pitch2" coef="1.0"/>-->
+    <!--        </fixed>-->
+    <!--        <fixed name="right_elbow" limited="true" range="-0.0000001 0.00000001">-->
+    <!--            <joint joint="joint_rightarm_elbow_pitch1" coef="1.0"/>-->
+    <!--            <joint joint="joint_rightarm_elbow_pitch2" coef="1.0"/>-->
+    <!--        </fixed>-->
+
+    <!--&lt;!&ndash;        <fixed name="left_wrist_yaw">&ndash;&gt;-->
+    <!--&lt;!&ndash;            <joint joint="joint_leftarm_wrist_yaw1" coef="1.0"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <joint joint="joint_leftarm_wrist_yaw2" coef="-1.0"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;        </fixed>&ndash;&gt;-->
+    <!--        <fixed name="left_wrist_pitch">-->
+    <!--            <joint joint="joint_leftarm_wrist_pitch1" coef="1.0"/>-->
+    <!--            <joint joint="joint_leftarm_wrist_pitch2" coef="-1.0"/>-->
+    <!--        </fixed>-->
+    <!--&lt;!&ndash;        <fixed name="right_wrist_yaw">&ndash;&gt;-->
+    <!--&lt;!&ndash;            <joint joint="joint_rightarm_wrist_yaw1" coef="1.0"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;            <joint joint="joint_rightarm_wrist_yaw2" coef="-1.0"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;        </fixed>&ndash;&gt;-->
+    <!--        <fixed name="right_wrist_pitch">-->
+    <!--            <joint joint="joint_rightarm_wrist_pitch1" coef="1.0"/>-->
+    <!--            <joint joint="joint_rightarm_wrist_pitch2" coef="-1.0"/>-->
+    <!--        </fixed>-->
+
+    <!--    </tendon>-->
+
+    <!--    <actuator>-->
+    <!--        &lt;!&ndash; WAIST&ndash;&gt;-->
+    <!--&lt;!&ndash;        <motor name="motor_waist_lower_pitch" ctrllimited="true" ctrlrange="-10 10" joint="joint_waist_lower_pitch"&ndash;&gt;-->
+    <!--&lt;!&ndash;                 gainprm="0.1118" gear="65" user="5.21 0.26"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;        <motor name="motor_waist_upper_pitch" ctrllimited="true" ctrlrange="-10 10" joint="joint_waist_upper_pitch"&ndash;&gt;-->
+    <!--&lt;!&ndash;                 gainprm="0.1118" gear="65" user="5.21 0.26"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;        <motor name="motor_waist_upper_roll" ctrllimited="true" ctrlrange="-10 10" joint="joint_waist_upper_roll"&ndash;&gt;-->
+    <!--&lt;!&ndash;                 gainprm="0.1118" gear="65" user="5.21 0.26"/>&ndash;&gt;-->
+    <!--        <motor name="motor_waist_upper_yaw" ctrllimited="true" ctrlrange="-10 10" joint="joint_waist_upper_yaw"-->
+    <!--                 gear="65" user="5.21 0.26"/>-->
+
+    <!--        &lt;!&ndash; RIGHT&ndash;&gt;-->
+    <!--        <motor name="motor_rightarm_shoulder_pitch" ctrllimited="true" ctrlrange="-6 6" joint="joint_rightarm_shoulder_pitch"-->
+    <!--                  gear="44.566" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_rightarm_shoulder_roll" ctrllimited="true" ctrlrange="-6 6" joint="joint_rightarm_shoulder_roll"-->
+    <!--                  gear="44.566" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_rightarm_shoulder_yaw" ctrllimited="true" ctrlrange="-6 6" joint="joint_rightarm_shoulder_yaw"-->
+    <!--                  gear="44.566" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_rightarm_elbow_pitch" ctrllimited="true" ctrlrange="-6 6" joint="joint_rightarm_elbow_pitch1"-->
+    <!--                 gear="49.508" user="13 0.13037972938"/>-->
+    <!--&lt;!&ndash;        <motor name="motor_rightarm_wrist_yaw" ctrllimited="true" ctrlrange="-6 6" tendon="rightarm_wrist_tendeon3"&ndash;&gt;-->
+    <!--&lt;!&ndash;                  gear="647.16" user="13 0.13037972938"/>&ndash;&gt;-->
+    <!--        <motor name="motor_rightarm_wrist_pitch" ctrllimited="true" ctrlrange="-6 6" tendon="rightarm_wrist_tendeon1"-->
+    <!--                  gear="647.16" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_rightarm_wrist_roll" ctrllimited="true" ctrlrange="-6 6" joint="joint_rightarm_wrist_roll"-->
+    <!--                 gear="15.987" user="13 0.13037972938"/>-->
+
+    <!--        &lt;!&ndash; left&ndash;&gt;-->
+    <!--        <motor name="motor_leftarm_shoulder_pitch" ctrllimited="true" ctrlrange="-6 6" joint="joint_leftarm_shoulder_pitch"-->
+    <!--                 gear="44.566" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_leftarm_shoulder_roll" ctrllimited="true" ctrlrange="-6 6" joint="joint_leftarm_shoulder_roll"-->
+    <!--                  gear="44.566" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_leftarm_shoulder_yaw" ctrllimited="true" ctrlrange="-6 6" joint="joint_leftarm_shoulder_yaw"-->
+    <!--                  gear="44.566" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_leftarm_elbow_pitch" ctrllimited="true" ctrlrange="-6 6" joint="joint_leftarm_elbow_pitch1"-->
+    <!--                 user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_leftarm_wrist_yaw" ctrllimited="true" ctrlrange="-6 6" tendon="leftarm_wrist_tendeon3"-->
+    <!--                  gear="647.16" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_leftarm_wrist_pitch" ctrllimited="true" ctrlrange="-6 6" tendon="leftarm_wrist_tendeon1"-->
+    <!--                 gear="647.16" user="13 0.13037972938"/>-->
+    <!--        <motor name="motor_leftarm_wrist_roll" ctrllimited="true" ctrlrange="-6 6" joint="joint_leftarm_wrist_roll" -->
+    <!--                  user="13 0.13037972938"/>-->
+
+    <!--        &lt;!&ndash; gripper &ndash;&gt;-->
+    <!--&lt;!&ndash;        <general name="right_gripper" joint="right_gripper_joint1_left"   ctrllimited="true" ctrlrange="-2.0 2.0"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;        <general name="left_gripper" joint="left_gripper_joint1_left"     ctrllimited="true" ctrlrange="-2.0 2.0"/>&ndash;&gt;-->
+    <!--    </actuator>-->
+</mujoco>

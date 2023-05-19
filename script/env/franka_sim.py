@@ -14,6 +14,8 @@ from omni.isaac.core.materials import PhysicsMaterial
 from omni.isaac.core.utils.string import find_unique_string_name
 from omni.isaac.core.utils.prims import get_prim_at_path, is_prim_path_valid
 from omni.isaac.sensor import Camera
+from omni.isaac.mjcf import _mjcf
+
 from env.omni_base import OmniBase
 from typing import Optional, Union, Dict, List
 import matplotlib.pyplot as plt 
@@ -332,12 +334,12 @@ class FrankaSim(OmniBase):
             # Set target position
             place_position_lst = []
             for _agent_idx in range(len(self.robot_lst)): 
-                place_position_lst.append(np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+_agent_idx*self.config["place_offset"], 0.1]))
+                place_position_lst.append(np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+_agent_idx*self.config["place_offset"], 0.0515]))
             self.add_controller()
             # Random Initialization
             for agent_idx in range(self.config["agent_num"]):
                 for object_idx in range(self.config["object_num"]):
-                    random_position = (np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+_agent_idx*self.config["place_offset"], 0.3]))
+                    random_position = (np.array([np.random.uniform(0.5,0.7), np.random.uniform(-0.3,0.3)+agent_idx*self.config["place_offset"], self.config["object_info"]["scale"][2]/2.0]))
                     object_info = {"name": self.config["object_info"]["name"]+"_{}_{}".format(agent_idx+1, object_idx+1), 
                                 "prim_path": self.config["object_info"]["prim_path"]+"_{}_{}".format(agent_idx+1, object_idx+1),
                                 "position": random_position,
@@ -368,6 +370,15 @@ class FrankaSim(OmniBase):
         simulation_app.close()
 
     def main(self): 
+        mjcf_interface = _mjcf.acquire_mjcf_interface()
+
+        # setup config params
+        import_config = _mjcf.ImportConfig()
+        import_config.fix_base = True
+        mjcf_path = './asset/ambidex/desk/mujoco_model_isaac.xml'
+        prim_path= "/World/ambidex"
+        # parse and import file
+        mjcf_interface.create_asset_mjcf(mjcf_path, prim_path, import_config)
         if self.task_name=="pick-and-place":
             self.pick_and_place(epochs=self.config["epochs"])
         elif self.task_name=="following":
@@ -382,7 +393,7 @@ if __name__=="__main__":
     if task_name == 'pick-and-place': yaml_file = 'pnp_task.yaml'
     elif task_name == "stacking": yaml_file = "stack_task.yaml"
     elif task_name =="following": yaml_file = "follow_task.yaml"
-    task_info_dir = Path.joinpath(Path.cwd(), 'omniverse_usage/script/cfg/', yaml_file)
+    task_info_dir = Path.joinpath(Path.cwd(), 'cfg/', yaml_file)
     with open(task_info_dir, 'r') as f: config = yaml.load(f, Loader=yaml.FullLoader)
     # Instance environment  
     task = FrankaSim(task_name=task_name, config=config)

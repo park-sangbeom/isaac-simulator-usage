@@ -1,6 +1,6 @@
-epochs: 1
+epochs: 2
 seed: 42 
-agent_num: 3
+agent_num: 5
 plane_name: "grid_default"
 
 place_offset: 2.0

@@ -1,0 +1,71 @@
+<mujoco>
+    <asset>
+
+        <!-- WAIST -->
+        <mesh name="link_waist_base" file="waist/link_waist_base.STL" />
+        <mesh name="link_waist_lower_pitch" file="waist/link_waist_lower_pitch.STL" />
+        <mesh name="link_waist_upper_pitch" file="waist/link_waist_upper_pitch.STL" />
+        <mesh name="link_waist_upper_roll" file="waist/link_waist_upper_roll.STL" />
+        <mesh name="link_waist_upper_yaw" file="waist/link_waist_upper_yaw.STL" />
+
+        <mesh name="waist_lower_support" file="waist/waist_lower_support.STL" />
+        <mesh name="waist_middle_body" file="waist/waist_middle_body.STL" />
+        
+        <mesh name="waist_upper_support_right" file="waist/waist_upper_support_right.STL" />
+        <mesh name="waist_upper_support_left" file="waist/waist_upper_support_left.STL" />
+        <mesh name="waist_pivot_support_lower" file="waist/waist_pivot_support_lower.STL" />
+
+        <mesh name="waist_pivot_support_upper" file="waist/waist_pivot_support_upper.STL" />
+        <mesh name="waist_upperbody_yaw" file="waist/waist_upperbody_yaw.STL" />
+        <mesh name="waist_pivot_back" file="waist/waist_pivot_back.STL" />
+
+
+        <mesh name="spring1_case_stem" file="waist/spring1_case_stem.STL" />
+        <mesh name="waist_spring1_case" file="waist/waist_spring1_case.STL" />
+
+        <mesh name="waist_spring2_case" file="waist/waist_spring2_case.STL" />
+        <mesh name="waist_mainframe_slider" file="waist/waist_mainframe_slider.STL" />
+        <mesh name="spring2_case_stem" file="waist/spring2_case_stem.STL" />
+        <mesh name="spring2_pivot_moving" file="waist/spring2_pivot_moving.STL" />
+
+        <!-- RIGHT ARM -->
+        <mesh name="link_rightarm_body" file="rightarm/link_rightarm_body.STL" />
+        <mesh name="link_rightarm_shoulder_pitch" file="rightarm/link_rightarm_shoulder_pitch.STL" />
+        <mesh name="link_rightarm_shoulder_roll" file="rightarm/link_rightarm_shoulder_roll.STL" />
+        <mesh name="link_rightarm_shoulder_yaw" file="rightarm/link_rightarm_shoulder_yaw.STL" />
+        <mesh name="link_rightarm_elbow" file="rightarm/link_rightarm_elbow.STL" />
+        <mesh name="link_rightarm_lower" file="rightarm/link_rightarm_lower.STL" />
+        <mesh name="link_rightarm_wrist_yaw1" file="rightarm/link_rightarm_wrist_yaw1.STL" />
+        <mesh name="link_rightarm_wrist_pitch1" file="rightarm/link_rightarm_wrist_pitch1.STL" />
+        <mesh name="link_rightarm_wrist_temp1" file="rightarm/link_rightarm_wrist_temp1.STL" />
+        <mesh name="link_rightarm_wrist_pitch2" file="rightarm/link_rightarm_wrist_pitch2.STL" />
+        <mesh name="link_rightarm_wrist_yaw2" file="rightarm/link_rightarm_wrist_yaw2.STL" />
+        <mesh name="link_rightarm_wrist_temp2" file="rightarm/link_rightarm_wrist_temp2.STL" />
+        <mesh name="link_rightarm_wrist_roll" file="rightarm/link_rightarm_wrist_roll.STL" />
+
+        <!-- left ARM -->
+        <mesh name="link_leftarm_body" file="leftarm/link_leftarm_body.STL" />
+        <mesh name="link_leftarm_shoulder_pitch" file="leftarm/link_leftarm_shoulder_pitch.STL" />
+        <mesh name="link_leftarm_shoulder_roll" file="leftarm/link_leftarm_shoulder_roll.STL" />
+        <mesh name="link_leftarm_shoulder_yaw" file="leftarm/link_leftarm_shoulder_yaw.STL" />
+        <mesh name="link_leftarm_elbow" file="leftarm/link_leftarm_elbow.STL" />
+        <mesh name="link_leftarm_lower" file="leftarm/link_leftarm_lower.STL" />
+        <mesh name="link_leftarm_wrist_yaw1" file="leftarm/link_leftarm_wrist_yaw1.STL" />
+        <mesh name="link_leftarm_wrist_pitch1" file="leftarm/link_leftarm_wrist_pitch1.STL" />
+        <mesh name="link_leftarm_wrist_temp1" file="leftarm/link_leftarm_wrist_temp1.STL" />
+        <mesh name="link_leftarm_wrist_pitch2" file="leftarm/link_leftarm_wrist_pitch2.STL" />
+        <mesh name="link_leftarm_wrist_yaw2" file="leftarm/link_leftarm_wrist_yaw2.STL" />
+        <mesh name="link_leftarm_wrist_temp2" file="leftarm/link_leftarm_wrist_temp2.STL" />
+        <mesh name="link_leftarm_wrist_roll" file="leftarm/link_leftarm_wrist_roll.STL" />
+
+        <!-- GRIPPER -->
+        <mesh name="gripper_body" file="gripper_poc/gripper_body.STL"/>
+        <mesh name="gripper_link1_left" file="gripper_poc/gripper_link1_left.STL"/>
+        <mesh name="gripper_link1_right" file="gripper_poc/gripper_link1_right.STL"/>
+        <mesh name="gripper_link2_left" file="gripper_poc/gripper_link2_left.STL"/>
+        <mesh name="gripper_link2_right" file="gripper_poc/gripper_link2_right.STL"/>
+        <mesh name="gripper_tip_left" file="gripper_poc/gripper_tip_left.STL"/>
+        <mesh name="gripper_tip_right" file="gripper_poc/gripper_tip_right.STL"/>
+
+    </asset>
+</mujoco>

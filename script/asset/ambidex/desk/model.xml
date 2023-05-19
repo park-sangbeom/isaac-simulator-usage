@@ -1,0 +1,357 @@
+<robot name="ambidex4" base_link="link_waist_upper_yaw">
+
+    <!--    k_stiffness =-->
+    <!--    [ 31831.9 70077.5 -170.519 -915.329]-->
+    <link name="link_waist_upper_yaw">
+        <inertial value="0 0 0 0 0 0 0 0 0 0"/>
+    </link>
+    <link name="link_rightarm_shoulder_pitch">
+        <inertial value="1.85413349046082 -0.306889898967898 0.00761295561029117 -0.024031938448245 0.0086411881628023 0.062248626523457 0.0653280306449381 -0.00442074638794718 -0.000627445139267633 0.00278495262501122"/>
+    </link>
+    <link name="link_rightarm_shoulder_roll">
+        <inertial value="0.424588158645723 -0.0235772904460466 0.00330132929154294 0.00452000890107767 0.00138194988496775 0.00413466305891231 0.0040344808862309 0.000174380203125019 -0.000241136316294536 -6.08866331800326e-05"/>
+    </link>
+    <link name="link_rightarm_shoulder_yaw">
+        <inertial value="1.89925284784493 -0.00984900695887506 -0.00861536489248741 -0.353735021104778 0.0748594162496169 0.0748484562340297 0.00171080868611025 -4.9403650960226e-05 -0.00206127760772903 -0.00182057293265517"/>
+    </link>
+    <link name="link_rightarm_elbow_pitch1">
+        <inertial value="0.295544779295358 0.00658633899823358 -0.000355400722350231 -0.00956115488612292 0.000529584378652747 0.00058988536260975 0.000363380024823481 7.27609448554561e-06 0.000262065005152231 -1.3478305357277e-05"/>
+    </link>
+    <link name="link_rightarm_elbow_pitch2">
+        <inertial value="1.49734929957395 0.0954175276768807 -0.00639713813433339 -0.0142003209864494 0.000625947442864218 0.0077042909396052 0.00760892982847096 0.000410424311133872 0.000844000770012365 -5.76923382318878e-05"/>
+    </link>
+    <link name="link_rightarm_wrist_yaw1">
+        <inertial value="0.00133466872925409 8.84793124711827e-11 -9.07741004002068e-10 -1.55005717359905e-08 1.18528855181181e-08 9.50773915911917e-09 -1.74120011668381e-10 7.75277261259432e-10 -3.43907797509614e-09 -3.95667317628104e-09"/>
+    </link>
+    <link name="link_rightarm_wrist_pitch1">
+        <inertial value="0.00133272051783349 5.99459061837731e-05 -7.3631208125779e-09 -7.20464845273146e-07 1.92974928462806e-08 3.86495255278071e-06 3.86962628319979e-06 -5.12728126959385e-10 4.45997749347752e-08 -4.98395087369768e-10"/>
+    </link>
+    <link name="link_rightarm_wrist_pitch2">
+        <inertial value="0.00133066216055985 4.33026639755388e-09 -1.96838569989845e-09 -2.1926617193525e-09 5.47680191699372e-09 -4.81266979296233e-09 -1.07283291689175e-08 -1.02034568719657e-09 1.03800579580305e-09 5.6286278593603e-09"/>
+    </link>
+    <link name="link_rightarm_wrist_yaw2">
+        <inertial value="0.169607909807618 0.00182086873702731 -0.000603770655669615 -0.000521809113694766 0.000249680323894612 0.00019093144438078 0.000193398003300644 6.94361282153005e-06 5.91054203027068e-06 -7.66283470128218e-07"/>
+    </link>
+    <link name="link_rightarm_wrist_roll">
+<!--        <inertial value="0.246681498713609 0.00139365235882452 1.3491006574363e-05 -0.00424435493245221 0.00221917716114143 0.00194758313436539 0.00221637479246124 -2.50127721976924e-05 7.50349271820346e-05 8.47705447479934e-05"/>-->
+        <inertial value="8.16681499e-01 5.55436524e-02 1.34910066e-05 -4.24435493e-03 2.23917716e-03 7.11183313e-03 7.38062479e-03 -2.50127722e-05 7.50349272e-05 8.47705447e-05"/>
+    </link>
+
+    <link name="link_leftarm_shoulder_pitch">
+        <inertial value="1.82896418594429 -0.319085072895453 -0.0103399716825677 -0.0103039284339981 0.0086262647235534 0.0680223099579533 0.0713450468628152 0.00434523145057709 0.0019582202571595 -0.00292077989613905"/>
+    </link>
+    <link name="link_leftarm_shoulder_roll">
+        <inertial value="0.445918908538433 -0.0225900371981811 -0.00573272235609691 0.00613280864489042 0.00149539106766512 0.00415537070587658 0.00404362441355877 -0.000203681819764289 -0.000230747546174603 0.000118308534092132"/>
+    </link>
+    <link name="link_leftarm_shoulder_yaw">
+        <inertial value="1.53364674168604 -0.00675207406583969 0.00558643402861335 -0.323774769544237 0.0801051512972574 0.0800530876608229 0.00171200352441965 6.21051638070166e-05 -0.00168823137920345 0.00176052094226862"/>
+    </link>
+    <link name="link_leftarm_elbow_pitch1">
+        <inertial value="0.406524012920147 0.00907875123056739 0.000957174968699697 -0.0131609257008092 0.000649043254689913 0.000763428425015177 0.000421961538336509 -2.25398738163843e-05 0.000343301927389861 2.98740197285534e-05"/>
+    </link>
+    <link name="link_leftarm_elbow_pitch2">
+        <inertial value="1.40374419317801 0.0781108321203279 0.0029699351244375 -0.0136991967749109 0.000611189893624101 0.00607956491648054 0.00595949895292025 -0.000164906811535567 0.000696903070752674 3.76352072993211e-05"/>
+    </link>
+    <link name="link_leftarm_wrist_yaw1">
+        <inertial value="0.00133390498200434 1.01136156044606e-09 2.04944403621631e-09 -1.0281841867955e-08 1.57948444450957e-08 1.54627106360249e-08 5.43405449787961e-09 7.70751470037522e-10 1.45623296437713e-09 2.50328542217792e-09"/>
+    </link>
+    <link name="link_leftarm_wrist_pitch1">
+        <inertial value="0.00133210004581951 5.99276433553643e-05 -9.3298033608718e-09 -6.97363256188027e-07 -1.19446993300947e-08 3.82920327861916e-06 3.86441638162364e-06 -2.54185618441053e-09 5.17767048744838e-08 -8.9002021014513e-09"/>
+    </link>
+    <link name="link_leftarm_wrist_pitch2">
+        <inertial value="0.00133077372309534 -3.24566717819984e-09 3.00479972931361e-10 -1.77242787802824e-09 3.82543837613435e-10 -2.43630078250043e-09 5.50624775200109e-10 1.7456463253371e-09 2.59826847833685e-09 -9.25670169942239e-11"/>
+    </link>
+    <link name="link_leftarm_wrist_yaw2">
+        <inertial value="0.175461295820374 0.00194722907646411 0.000277305644292751 -0.000765165089894991 0.000252024256501603 0.000196955464557856 0.000194234871493221 -2.99331556079748e-06 8.81019638883703e-06 3.53110408728409e-06"/>
+    </link>
+    <link name="link_leftarm_wrist_roll">
+<!--        <inertial value="0.327820152079981 0.00372437703208991 -0.00490592381120979 -0.00998285813703253 0.00247311725628563 0.0025205336385149 0.00215265658838415 3.00066891529698e-05 9.56792894765412e-05 -3.80906520963e-05"/>-->
+        <inertial value="8.97820152e-01 5.78743770e-02 -4.90592381e-03 -9.98285814e-03 2.49311726e-03  7.68478364e-03  7.31690659e-03  3.00066892e-05 9.56792895e-05 -3.80906521e-05"/>
+    </link>
+
+
+
+    <!-- Site -->
+
+    <site name="cg_leftarm_upper">
+        <parent link="link_leftarm_shoulder_yaw" se3="0 0 0 0 0 0" />
+        <constant name="geom" value="0.08 0 0.01 0 0 0.01 -0.315" type="vdouble" />
+    </site>
+    <site name="cg_leftarm_lower">
+        <parent link="link_leftarm_elbow_pitch2" se3="0 0 0 0 0 0" />
+        <constant name="geom" value="0.06 0 0 0 0.212 0 0" type="vdouble" />
+    </site>
+    <site name="cg_leftarm_hand">
+        <parent link="link_leftarm_wrist_roll" se3="0 0 0 0 0 0" />
+        <constant name="geom" value="0.05 0 0 0 0.05 0 0" type="vdouble" />
+    </site>
+    <site name="cg_rightarm_upper">
+        <parent link="link_rightarm_shoulder_yaw" se3="0 0 0 0 0 0" />
+        <constant name="geom" value="0.08 0 -0.01 0 0 -0.01 -0.315" type="vdouble" />
+    </site>
+    <site name="cg_rightarm_lower">
+        <parent link="link_rightarm_elbow_pitch2" se3="0 0 0 0 0 0" />
+        <constant name="geom" value="0.06 0 0 0 0.212 0 0" type="vdouble" />
+    </site>
+    <site name="cg_rightarm_hand">
+        <parent link="link_rightarm_wrist_roll" se3="0 0 0 0 0 0" />
+        <constant name="geom" value="0.05 0 0 0 0.05 0 0" type="vdouble" />
+    </site>
+
+    <site name="site_leftarm_hand">
+        <parent link="link_leftarm_wrist_roll" se3="0 0 0 -0.045 0 0" />
+    </site>
+    <site name="site_rightarm_hand">
+        <parent link="link_rightarm_wrist_roll" se3="0 0 0 -0.045 0 0" />
+    </site>
+
+
+
+    <!-- Joint -->
+
+    <joint name="joint_rightarm_shoulder_pitch">
+        <parent link="link_waist_upper_yaw" se3="0 0 0 0 0 0"/>
+        <child link="link_rightarm_shoulder_pitch" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.88294877120105 -0.469469346639965 -0 0 0"/>
+        <position_limit min="-3.665190000000000" max="1.570800000000000"/>
+        <home_position value="0.49762"/>
+    </joint>
+    <joint name="joint_rightarm_shoulder_roll">
+        <parent link="link_rightarm_shoulder_pitch" se3="0 0 0 0 0 0"/>
+        <child link="link_rightarm_shoulder_roll" se3="0 0 0 0 0 0"/>
+        <screw axis="1 0 0 0 0 0"/>
+        <position_limit min="-3.665190000000000" max="0.226890000000000"/>
+        <home_position value="3.75322"/>
+    </joint>
+    <joint name="joint_rightarm_shoulder_yaw">
+        <parent link="link_rightarm_shoulder_roll" se3="0 0 0 0 0 0"/>
+        <child link="link_rightarm_shoulder_yaw" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0 1 0 0 0"/>
+        <position_limit min="-1.570800000000000" max="1.570800000000000"/>
+        <home_position value="1.94627"/>
+    </joint>
+    <joint name="joint_rightarm_elbow_pitch1">
+        <parent link="link_rightarm_shoulder_yaw" se3="0 0 0 0 0 -0.315"/>
+        <child link="link_rightarm_elbow_pitch1" se3="0 0 0 0 0 0"/>
+        <screw axis="0 1 0 0 0 0"/>
+        <position_limit min="-0.567230000000000" max="0.785400000000000"/>
+        <home_position value="1.80454"/>
+    </joint>
+    <joint name="joint_rightarm_elbow_pitch2">
+        <parent link="link_rightarm_elbow_pitch1" se3="0 0 0 0.05656854 0 -0.05656854"/>
+        <child link="link_rightarm_elbow_pitch2" se3="0 0 0 0 0 0"/>
+        <screw axis="0 1 0 0 0 0"/>
+        <position_limit min="-0.567230000000000" max="0.785400000000000"/>
+        <home_position value="1.80454"/>
+    </joint>
+    <joint name="joint_rightarm_wrist_yaw1">
+        <parent link="link_rightarm_elbow_pitch2" se3="0 0 0 0.212 0 0"/>
+        <child link="link_rightarm_wrist_yaw1" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 0.707106781186548 0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_rightarm_wrist_pitch1">
+        <parent link="link_rightarm_wrist_yaw1" se3="0 0 0 0 0 0"/>
+        <child link="link_rightarm_wrist_pitch1" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 -0.707106781186548 -0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_rightarm_wrist_pitch2">
+        <parent link="link_rightarm_wrist_pitch1" se3="0 0 0 0.09 0 0"/>
+        <child link="link_rightarm_wrist_pitch2" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 -0.707106781186548 -0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_rightarm_wrist_yaw2">
+        <parent link="link_rightarm_wrist_pitch2" se3="0 0 0 0 0 0"/>
+        <child link="link_rightarm_wrist_yaw2" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 0.707106781186548 0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_rightarm_wrist_roll">
+        <parent link="link_rightarm_wrist_yaw2" se3="0 0 0 0 0 0"/>
+        <child link="link_rightarm_wrist_roll" se3="0 0 0 0 0 0"/>
+        <screw axis="1 0 0 0 0 0"/>
+        <position_limit min="-2.617993333" max="2.617993333"/>
+        <home_position value="1.98416"/>
+    </joint>
+
+    <joint name="joint_leftarm_shoulder_pitch">
+        <parent link="link_waist_upper_yaw" se3="0 0 0 0 0 0"/>
+        <child link="link_leftarm_shoulder_pitch" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.88294877120105 0.469469346639965 -0 0 0"/>
+        <position_limit min="-3.665190000000000" max="1.570800000000000"/>
+        <home_position value="4.67090"/>
+    </joint>
+    <joint name="joint_leftarm_shoulder_roll">
+        <parent link="link_leftarm_shoulder_pitch" se3="0 0 0 0 0 0"/>
+        <child link="link_leftarm_shoulder_roll" se3="0 0 0 0 0 0"/>
+        <screw axis="1 0 0 0 0 0"/>
+        <position_limit min="-0.226890000000000" max="3.665190000000000"/>
+        <home_position value="4.34829"/>
+    </joint>
+    <joint name="joint_leftarm_shoulder_yaw">
+        <parent link="link_leftarm_shoulder_roll" se3="0 0 0 0 0 0"/>
+        <child link="link_leftarm_shoulder_yaw" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0 1 0 0 0"/>
+        <position_limit min="-1.570800000000000" max="1.570800000000000"/>
+        <home_position value="1.71375"/>
+    </joint>
+    <joint name="joint_leftarm_elbow_pitch1">
+        <parent link="link_leftarm_shoulder_yaw" se3="0 0 0 0 0 -0.315"/>
+        <child link="link_leftarm_elbow_pitch1" se3="0 0 0 0 0 0"/>
+        <screw axis="0 1 0 0 0 0"/>
+        <position_limit min="-0.567230000000000" max="0.785400000000000"/>
+        <home_position value="3.35940"/>
+    </joint>
+    <joint name="joint_leftarm_elbow_pitch2">
+        <parent link="link_leftarm_elbow_pitch1" se3="0 0 0 0.05656854 0 -0.05656854"/>
+        <child link="link_leftarm_elbow_pitch2" se3="0 0 0 0 0 0"/>
+        <screw axis="0 1 0 0 0 0"/>
+        <position_limit min="-0.567230000000000" max="0.785400000000000"/>
+        <home_position value="3.35940"/>
+    </joint>
+    <joint name="joint_leftarm_wrist_yaw1">
+        <parent link="link_leftarm_elbow_pitch2" se3="0 0 0 0.212 0 0"/>
+        <child link="link_leftarm_wrist_yaw1" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 0.707106781186548 0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_leftarm_wrist_pitch1">
+        <parent link="link_leftarm_wrist_yaw1" se3="0 0 0 0 0 0"/>
+        <child link="link_leftarm_wrist_pitch1" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 -0.707106781186548 -0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_leftarm_wrist_pitch2">
+        <parent link="link_leftarm_wrist_pitch1" se3="0 0 0 0.09 0 0"/>
+        <child link="link_leftarm_wrist_pitch2" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 -0.707106781186548 -0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_leftarm_wrist_yaw2">
+        <parent link="link_leftarm_wrist_pitch2" se3="0 0 0 0 0 0"/>
+        <child link="link_leftarm_wrist_yaw2" se3="0 0 0 0 0 0"/>
+        <screw axis="0 0.707106781186548 0.707106781186548 0 0 0"/>
+        <position_limit min="-0.785400000000000" max="0.785400000000000"/>
+    </joint>
+    <joint name="joint_leftarm_wrist_roll">
+        <parent link="link_leftarm_wrist_yaw2" se3="0 0 0 0 0 0"/>
+        <child link="link_leftarm_wrist_roll" se3="0 0 0 0 0 0"/>
+        <screw axis="1 0 0 0 0 0"/>
+        <position_limit min="-2.617993333" max="2.617993333"/>
+        <home_position value="2.73617"/>
+    </joint>
+
+    <!-- Actuator -->
+    <actuator name="motor_rightarm_shoulder_pitch">
+        <inertial value="0.000005450304819"/>
+        <friction coulomb="0.023656556625175" viscous="0.000161201953478"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.022438000000000"/>
+    </actuator>
+    <actuator name="motor_rightarm_shoulder_roll">
+        <inertial value="0.000012564385867"/>
+        <friction coulomb="0.022254880920542" viscous="0.000326390195173"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.022438000000000"/>
+    </actuator>
+    <actuator name="motor_rightarm_shoulder_yaw">
+        <inertial value="0.000011980270317"/>
+        <friction coulomb="0.018101285136661" viscous="0.000211065620063"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.022438000000000"/>
+    </actuator>
+    <actuator name="motor_rightarm_elbow_pitch">
+        <inertial value="0.000010105202426"/>
+        <friction coulomb="0.026151045104572" viscous="0.000422898687970"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.020199000000000"/>
+    </actuator>
+    <actuator name="motor_rightarm_wrist_yaw">
+        <inertial value="0.000003400094214"/>
+        <friction coulomb="0.017068730469963" viscous="0.000192615400344"/>
+        <current_gain value="0.085000000000000"/>
+        <parameter name="gear_ratio" value="0.024144000000000"/>
+    </actuator>
+    <actuator name="motor_rightarm_wrist_pitch">
+        <inertial value="0.000003323874220"/>
+        <friction coulomb="0.013225255506223" viscous="0.000238016589432"/>
+        <current_gain value="0.085000000000000"/>
+        <parameter name="gear_ratio" value="0.024144000000000"/>
+    </actuator>
+    <actuator name="motor_rightarm_wrist_roll">
+        <inertial value="0.000003391530420"/>
+        <friction coulomb="0.015387619161232" viscous="0.000108769084810"/>
+        <current_gain value="0.085000000000000"/>
+        <parameter name="gear_ratio" value="0.062552000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_shoulder_pitch">
+        <inertial value="0.000007387240637"/>
+        <friction coulomb="0.026002907760086" viscous="0.000156854433369"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.022438000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_shoulder_roll">
+        <inertial value="0.000013498202069"/>
+        <friction coulomb="0.025874793015268" viscous="0.000310416576353"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.022438000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_shoulder_yaw">
+        <inertial value="0.000012322308896"/>
+        <friction coulomb="0.019393091907919" viscous="0.000319485282335"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.022438000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_elbow_pitch">
+        <inertial value="0.000009495744521"/>
+        <friction coulomb="0.026955974190308" viscous="0.000284622872792"/>
+        <current_gain value="0.111800000000000"/>
+        <parameter name="gear_ratio" value="0.020199000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_wrist_yaw">
+        <inertial value="0.000003249316725"/>
+        <friction coulomb="0.022548694140082" viscous="0.000173729699255"/>
+        <current_gain value="0.085000000000000"/>
+        <parameter name="gear_ratio" value="0.024144000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_wrist_pitch">
+        <inertial value="0.000003424616036"/>
+        <friction coulomb="0.018710517611098" viscous="0.000134300635652"/>
+        <current_gain value="0.085000000000000"/>
+        <parameter name="gear_ratio" value="0.024144000000000"/>
+    </actuator>
+    <actuator name="motor_leftarm_wrist_roll">
+        <inertial value="0.000003385515234"/>
+        <friction coulomb="0.011869660586496" viscous="0.000166825010622"/>
+        <current_gain value="0.085000000000000"/>
+        <parameter name="gear_ratio" value="0.062552000000000"/>
+    </actuator>
+    <!-- Transmission -->
+    <transmission>
+
+        joint_rightarm_shoulder_pitch = motor_rightarm_shoulder_pitch_gear_ratio * motor_rightarm_shoulder_pitch
+        joint_rightarm_shoulder_roll = motor_rightarm_shoulder_roll_gear_ratio * motor_rightarm_shoulder_roll
+        joint_rightarm_shoulder_yaw = motor_rightarm_shoulder_yaw_gear_ratio * motor_rightarm_shoulder_yaw
+        joint_rightarm_elbow_pitch1 = motor_rightarm_elbow_pitch_gear_ratio * motor_rightarm_elbow_pitch
+        joint_rightarm_elbow_pitch2 = joint_rightarm_elbow_pitch1
+        joint_rightarm_wrist_yaw1 = asin(motor_rightarm_wrist_yaw_gear_ratio * motor_rightarm_wrist_yaw / cos(joint_rightarm_wrist_pitch1))
+        joint_rightarm_wrist_pitch1 = asin(motor_rightarm_wrist_pitch_gear_ratio * motor_rightarm_wrist_pitch)
+        joint_rightarm_wrist_pitch2 = joint_rightarm_wrist_pitch1
+        joint_rightarm_wrist_yaw2 = joint_rightarm_wrist_yaw1
+        joint_rightarm_wrist_roll = motor_rightarm_wrist_roll_gear_ratio * motor_rightarm_wrist_roll
+
+        joint_leftarm_shoulder_pitch = motor_leftarm_shoulder_pitch_gear_ratio * motor_leftarm_shoulder_pitch
+        joint_leftarm_shoulder_roll = motor_leftarm_shoulder_roll_gear_ratio * motor_leftarm_shoulder_roll
+        joint_leftarm_shoulder_yaw = motor_leftarm_shoulder_yaw_gear_ratio * motor_leftarm_shoulder_yaw
+        joint_leftarm_elbow_pitch1 = motor_leftarm_elbow_pitch_gear_ratio * motor_leftarm_elbow_pitch
+        joint_leftarm_elbow_pitch2 = joint_leftarm_elbow_pitch1
+        joint_leftarm_wrist_yaw1 = asin(motor_leftarm_wrist_yaw_gear_ratio * motor_leftarm_wrist_yaw / cos(joint_leftarm_wrist_pitch1))
+        joint_leftarm_wrist_pitch1 = asin(motor_leftarm_wrist_pitch_gear_ratio * motor_leftarm_wrist_pitch)
+        joint_leftarm_wrist_pitch2 = joint_leftarm_wrist_pitch1
+        joint_leftarm_wrist_yaw2 = joint_leftarm_wrist_yaw1
+        joint_leftarm_wrist_roll = motor_leftarm_wrist_roll_gear_ratio * motor_leftarm_wrist_roll
+
+    </transmission>
+</robot>

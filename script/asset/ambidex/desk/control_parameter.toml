@@ -1,0 +1,256 @@
+#########################################
+#                                       #
+#             GLOBAL SETTING            #
+#                                       #
+#########################################
+[GlobalSetting]
+## DO NOT CHANGE THE ORDER OF THE ACTUATOR LIST (CONTROLLER IS HARDCODED)
+#actuators = ["waist_lower_pitch", "waist_upper_pitch", "waist_upper_roll", "waist_upper_yaw",
+#             "left_motor_shoulder_1", "left_motor_shoulder_2", "left_motor_shoulder_3", "left_motor_elbow", "left_motor_wrist_1", "left_motor_wrist_2", "left_motor_wrist_3",
+#             "right_motor_shoulder_1", "right_motor_shoulder_2", "right_motor_shoulder_3", "right_motor_elbow", "right_motor_wrist_1", "right_motor_wrist_2", "right_motor_wrist_3"]
+#actuators = ["left_motor_shoulder_1", "left_motor_shoulder_2", "left_motor_shoulder_3", "left_motor_elbow", "left_motor_wrist_1", "left_motor_wrist_2", "left_motor_wrist_3",
+#             "right_motor_shoulder_1", "right_motor_shoulder_2", "right_motor_shoulder_3", "right_motor_elbow", "right_motor_wrist_1", "right_motor_wrist_2", "right_motor_wrist_3"]
+actuators = ["motor_leftarm_shoulder_pitch", "motor_leftarm_shoulder_roll", "motor_leftarm_shoulder_yaw", "motor_leftarm_elbow_pitch", "motor_leftarm_wrist_yaw", "motor_leftarm_wrist_pitch", "motor_leftarm_wrist_roll",
+             "motor_rightarm_shoulder_pitch", "motor_rightarm_shoulder_roll", "motor_rightarm_shoulder_yaw", "motor_rightarm_elbow_pitch", "motor_rightarm_wrist_yaw", "motor_rightarm_wrist_pitch", "motor_rightarm_wrist_roll"]
+
+useHC = true ## true
+useSelfCollisionAvoidance = false
+useJointLimit = true # true
+useBodyBoxLimit = false
+# NOT IMPLEMENTED YET
+#BlockDiagonalMassMatrixGroup = [["waist_lower_pitch", "waist_upper_pitch", "waist_upper_roll", "waist_upper_yaw"],
+#                                ["left_motor_shoulder_1", "left_motor_shoulder_2", "left_motor_shoulder_3", "left_motor_elbow", "left_motor_wrist_1", "left_motor_wrist_2", "left_motor_wrist_3"],
+#                                ["right_motor_shoulder_1", "right_motor_shoulder_2", "right_motor_shoulder_3", "right_motor_elbow", "right_motor_wrist_1", "right_motor_wrist_2", "right_motor_wrist_3"]]
+#BlockDiagonalMassMatrixGroup = [["left_motor_shoulder_1", "left_motor_shoulder_2", "left_motor_shoulder_3", "left_motor_elbow", "left_motor_wrist_1", "left_motor_wrist_2", "left_motor_wrist_3"],
+#                                ["right_motor_shoulder_1", "right_motor_shoulder_2", "right_motor_shoulder_3", "right_motor_elbow", "right_motor_wrist_1", "right_motor_wrist_2", "right_motor_wrist_3"]]
+
+#BlockDiagonalMassMatrixGroup = [["left_motor_shoulder_1"], ["left_motor_shoulder_2"], ["left_motor_shoulder_3"], ["left_motor_elbow"], ["left_motor_wrist_1"], ["left_motor_wrist_2"], ["left_motor_wrist_3"],
+#                                ["right_motor_shoulder_1"], ["right_motor_shoulder_2"], ["right_motor_shoulder_3"], ["right_motor_elbow"], ["right_motor_wrist_1"], ["right_motor_wrist_2"], ["right_motor_wrist_3"]]
+BlockDiagonalMassMatrixGroup = [["motor_leftarm_shoulder_pitch"], ["motor_leftarm_shoulder_roll"], ["motor_leftarm_shoulder_yaw"], ["motor_leftarm_elbow_pitch"], ["motor_leftarm_wrist_yaw"], ["motor_leftarm_wrist_pitch"], ["motor_leftarm_wrist_roll"],
+                                ["motor_rightarm_shoulder_pitch"], ["motor_rightarm_shoulder_roll"], ["motor_rightarm_shoulder_yaw"], ["motor_rightarm_elbow_pitch"], ["motor_rightarm_wrist_yaw"], ["motor_rightarm_wrist_pitch"], ["motor_rightarm_wrist_roll"]]
+
+
+spring_stiffness = [1000.0, 1000.0]
+Kext = 50.0
+cutoff_freq = 40.0
+# NOT IMPLEMENTED YET
+#friction = []
+#useFrictionCompensation = true
+## TorqueLimit is mandatory if useHC is true
+
+
+#########################################
+#                                       #
+#             SELF COLLISION            #
+#                                       #
+#########################################
+[SelfCollision]
+normalized_damping = 40.0
+normalized_stiffness = 400.0
+
+#########################################
+#                                       #
+#              JOINT LIMIT              #
+#                                       #
+#########################################
+[JointLimit]
+weight = 1.0
+
+[[JointLimit.joint]]
+name = "joint_leftarm_shoulder_pitch"
+lowerbound = -80.0
+upperbound = 80.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+
+[[JointLimit.joint]]
+name = "joint_leftarm_shoulder_roll"
+lowerbound = 10.0
+upperbound = 80.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+#
+[[JointLimit.joint]]
+name = "joint_leftarm_shoulder_yaw"
+lowerbound = -80.0
+upperbound = 80.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+
+[[JointLimit.joint]]
+name = "joint_leftarm_elbow_pitch1"
+lowerbound = -30.0
+upperbound = 30.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+
+[[JointLimit.joint]]
+name = "joint_leftarm_wrist_yaw1"
+lowerbound = -30.0
+upperbound = 30.0
+normalized_damping = 600.0
+normalized_stiffness = 90000.0
+
+[[JointLimit.joint]]
+name = "joint_leftarm_wrist_pitch1"
+lowerbound = -30.0
+upperbound = 30.0
+normalized_damping = 600.0
+normalized_stiffness = 90000.0
+
+
+
+[[JointLimit.joint]]
+name = "joint_rightarm_shoulder_pitch"
+lowerbound = -80.0
+upperbound = 80.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+
+[[JointLimit.joint]]
+name = "joint_rightarm_shoulder_roll"
+lowerbound = -80.0
+upperbound = -10.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+#
+[[JointLimit.joint]]
+name = "joint_rightarm_shoulder_yaw"
+lowerbound = -80.0
+upperbound = 80.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+
+[[JointLimit.joint]]
+name = "joint_rightarm_elbow_pitch1"
+lowerbound = -30.0
+upperbound = 30.0
+normalized_damping = 60.0
+normalized_stiffness = 900.0
+
+[[JointLimit.joint]]
+name = "joint_rightarm_wrist_yaw1"
+lowerbound = -30.0
+upperbound = 30.0
+normalized_damping = 600.0
+normalized_stiffness = 90000.0
+
+[[JointLimit.joint]]
+name = "joint_rightarm_wrist_pitch1"
+lowerbound = -30.0
+upperbound = 30.0
+normalized_damping = 600.0
+normalized_stiffness = 90000.0
+#########################################
+#                                       #
+#              TORQUE LIMIT             #
+#                                       #
+#########################################
+[TorqueLimit]
+
+#[[TorqueLimit.motor]]
+#name = "waist_lower_pitch"
+#lowerbound = -10.0
+#upperbound = 10.0
+#
+#[[TorqueLimit.motor]]
+#name = "waist_upper_pitch"
+#lowerbound = -10.0
+#upperbound = 10.0
+#
+#[[TorqueLimit.motor]]
+#name = "waist_upper_roll"
+#lowerbound = -10.0
+#upperbound = 10.0
+#
+#[[TorqueLimit.motor]]
+#name = "waist_upper_yaw"
+#lowerbound = -10.0
+#upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_shoulder_pitch"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_shoulder_roll"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_shoulder_yaw"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_elbow_pitch"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_wrist_yaw"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_wrist_pitch"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_leftarm_wrist_roll"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_shoulder_pitch"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_shoulder_roll"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_shoulder_yaw"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_elbow_pitch"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_wrist_yaw"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_wrist_pitch"
+lowerbound = -10.0
+upperbound = 10.0
+
+[[TorqueLimit.motor]]
+name = "motor_rightarm_wrist_roll"
+lowerbound = -10.0
+upperbound = 10.0
+
+#########################################
+#                                       #
+#              BODY BOX LIMIT           #
+#                                       #
+#########################################
+[BodyBoxLimit]
+# box_size : [X/2, Y/2, Z/2]
+[[BodyBoxLimit.pair]]
+site = "site_leftarm_hand"
+box_center = [0.0, 0.2, 0.0]
+box_size = [0.4, 0.3, 0.2]
+
+[[BodyBoxLimit.pair]]
+site = "site_rightarm_hand"
+box_center = [0.0, 0.2, 0.0]
+box_size = [0.4, 0.3, 0.2]
