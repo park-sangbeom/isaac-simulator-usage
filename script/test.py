@@ -1,10 +1,15 @@
-from omni.isaac.mjcf import _mjcf
-mjcf_interface = _mjcf.acquire_mjcf_interface()
-
-# setup config params
-import_config = _mjcf.ImportConfig()
-import_config.fix_base = True
-mjcf_path = './asset/ambidex/desk/mujoco_model_isaac.xml'
-prim_path: "/World/ambidex"
-# parse and import file
-mjcf_interface.create_asset_mjcf(mjcf_path, prim_path, import_config)
+import random
+from omni.isaac.kit import SimulationApp
+simulation_app = SimulationApp({"headless": False})
+import omni.isaac.debug_draw as debug_draw
+draw = debug_draw._debug_draw.acquire_debug_draw_interface()
+N = 10000
+point_list_1 = [
+    (random.uniform(1000, 3000), random.uniform(-1000, 1000), random.uniform(-1000, 1000)) for _ in range(N)
+]
+point_list_2 = [
+    (random.uniform(1000, 3000), random.uniform(-1000, 1000), random.uniform(-1000, 1000)) for _ in range(N)
+]
+colors = [(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1), 1) for _ in range(N)]
+sizes = [random.randint(1, 25) for _ in range(N)]
+draw.draw_lines(point_list_1, point_list_2, colors, sizes)
