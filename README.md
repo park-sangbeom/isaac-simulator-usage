@@ -1,2 +1,2 @@
-# issac-simulator-usage
+# isaac-simulator-usage
 This is a tutorial for the ISAAC Omniverse Simulator
